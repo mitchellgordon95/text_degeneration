@@ -75,44 +75,38 @@ class BaseExperiment:
                     print(f"  Skipping {method} (already completed)")
                     continue
 
-                try:
-                    # Generate outputs
-                    print(f"  Generating with {method}...")
-                    outputs = self.generate_outputs(model, method)
+                # Generate outputs - let errors propagate
+                print(f"  Generating with {method}...")
+                outputs = self.generate_outputs(model, method)
 
-                    # Save raw outputs immediately
-                    self.save_raw_outputs(model_name, method, outputs)
+                # Save raw outputs immediately
+                self.save_raw_outputs(model_name, method, outputs)
 
-                    # Compute metrics
-                    print(f"  Computing metrics...")
-                    metrics = self.compute_metrics(outputs, model, method)
+                # Compute metrics
+                print(f"  Computing metrics...")
+                metrics = self.compute_metrics(outputs, model, method)
 
-                    # Store results
-                    self.results[model_name][method] = {
-                        "outputs": outputs,
-                        "metrics": metrics,
-                        "timestamp": datetime.now().isoformat()
-                    }
+                # Store results
+                self.results[model_name][method] = {
+                    "outputs": outputs,
+                    "metrics": metrics,
+                    "timestamp": datetime.now().isoformat()
+                }
 
-                    # Update costs
-                    if hasattr(model, 'total_cost'):
-                        self.total_cost += model.total_cost
-                    if hasattr(model, 'total_tokens'):
-                        self.total_tokens += model.total_tokens
+                # Update costs
+                if hasattr(model, 'total_cost'):
+                    self.total_cost += model.total_cost
+                if hasattr(model, 'total_tokens'):
+                    self.total_tokens += model.total_tokens
 
-                    # Save checkpoint
-                    self.save_checkpoint()
+                # Save checkpoint after successful completion
+                self.save_checkpoint()
 
-                    # Save metrics
-                    self.save_metrics(model_name, method, metrics)
+                # Save metrics
+                self.save_metrics(model_name, method, metrics)
 
-                    # Print summary
-                    self.print_metrics_summary(model_name, method, metrics)
-
-                except Exception as e:
-                    print(f"  Error with {method}: {e}")
-                    traceback.print_exc()
-                    continue
+                # Print summary
+                self.print_metrics_summary(model_name, method, metrics)
 
         # Save final results
         self.save_final_results()

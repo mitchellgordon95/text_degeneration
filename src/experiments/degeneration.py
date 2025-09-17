@@ -37,22 +37,17 @@ class DegenerationExperiment(BaseExperiment):
         prompts_to_use = self.prompts[:num_samples]
 
         for prompt in tqdm(prompts_to_use, desc=f"    Generating", leave=False):
-            try:
-                # Parse method to extract parameters
-                params = self._parse_method(method)
+            # Parse method to extract parameters
+            params = self._parse_method(method)
 
-                # Generate text
-                output = model.generate(
-                    prompt=prompt,
-                    method=params["base_method"],
-                    max_length=self.max_length,
-                    **params
-                )
-                outputs.append(output)
-
-            except Exception as e:
-                print(f"      Error generating for prompt: {e}")
-                outputs.append("")  # Append empty string on error
+            # Generate text - let errors propagate
+            output = model.generate(
+                prompt=prompt,
+                method=params["base_method"],
+                max_length=self.max_length,
+                **params
+            )
+            outputs.append(output)
 
         return outputs
 
