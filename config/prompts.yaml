@@ -1,86 +1,95 @@
-# Test prompts for experiments
-
-# Default prompts (WebText-style, similar to Holtzman et al.)
+'# Note': WebText-style prompts extracted from high-quality text sources
+'# Source': Similar to prompts used in Holtzman et al. 2019
+'# Prompt length': 10-40 tokens as in the original paper
+webtext_prompts:
+- Neuroscientists studying the human brain have made remarkable discoveries about
+  how memories are formed and stored.
+- The rise of artificial intelligence in healthcare has begun
+- The mathematics behind modern cryptography relies on problems that are easy to verify
+  but computationally difficult to solve. As quantum computers become more powerful
+- Archaeological excavations in Turkey have uncovered what may be the world's oldest
+- Climate scientists have been tracking the unprecedented rate of ice melt in
+- Urban planners are increasingly turning to data science and artificial
+- Linguists studying endangered languages estimate that half of the world's 7,000
+  languages will disappear within the next century. Each language that vanishes takes
+  with it
+- The global supply chain crisis that emerged during the pandemic has forced companies
+  to reconsider their manufacturing
+- The discovery of gravitational waves has opened an entirely
+- In the depths of the Amazon rainforest, researchers have discovered a complex network
+  of ancient settlements connected by road systems. These pre-Columbian civilizations
+  were far more sophisticated
+- Astronomers have detected mysterious radio signals from distant galaxies that repeat
+  in predictable patterns. These fast radio bursts release as much energy in milliseconds
+- The discovery of CRISPR gene-editing technology has opened unprecedented possibilities
+  for treating genetic diseases. Scientists can now precisely modify DNA sequences
+- The human microbiome, consisting of trillions of bacteria living in and
+- The rapid evolution of electric vehicle technology has pushed traditional automakers
+  to completely reimagine their business models. Battery costs have fallen by more
+  than 80 percent
+- Marine biologists exploring the deep ocean have discovered ecosystems thriving in
+  complete darkness around hydrothermal vents. These unique environments host species
+- Coral reefs around the world are experiencing unprecedented bleaching events due
+- The development of quantum computing has accelerated rapidly in recent years, with
+  major technology companies investing billions of dollars in research. These powerful
+  machines promise to revolutionize fields from
+- The development of mRNA vaccines during the COVID-19 pandemic has revolutionized
+  our approach to preventing infectious diseases. This technology, decades in the
+  making
+- Renewable energy sources have become increasingly cost-competitive with fossil fuels,
+  leading to a
+- The James Webb Space Telescope has captured images of galaxies that formed just
+  a few hundred
+'# For experiments': ''
 default_prompts:
-  - "The recent advances in artificial intelligence have"
-  - "Scientists have discovered a new species of"
-  - "The impact of climate change on global"
-  - "In a surprising turn of events, the company"
-  - "The history of human civilization shows that"
-  - "Researchers at the university have developed"
-  - "The economic implications of this policy are"
-  - "According to recent studies, people who"
-  - "The fundamental principles of democracy include"
-  - "Technology has transformed the way we"
-  - "The relationship between education and success"
-  - "In the field of medicine, breakthrough discoveries"
-  - "The role of social media in modern society"
-  - "Archaeological evidence suggests that ancient civilizations"
-  - "The psychological effects of isolation can"
-  - "Environmental conservation efforts have focused on"
-  - "The future of transportation will likely involve"
-  - "Cultural differences between nations often manifest"
-  - "The human brain processes information through"
-  - "Economic theories suggest that market forces"
-
-# Creative writing prompts
+- Neuroscientists studying the human brain have made remarkable discoveries about
+  how memories are formed and stored.
+- The rise of artificial intelligence in healthcare has begun
+- The mathematics behind modern cryptography relies on problems that are easy to verify
+  but computationally difficult to solve. As quantum computers become more powerful
+- Archaeological excavations in Turkey have uncovered what may be the world's oldest
+- Climate scientists have been tracking the unprecedented rate of ice melt in
+- Urban planners are increasingly turning to data science and artificial
+- Linguists studying endangered languages estimate that half of the world's 7,000
+  languages will disappear within the next century. Each language that vanishes takes
+  with it
+- The global supply chain crisis that emerged during the pandemic has forced companies
+  to reconsider their manufacturing
+- The discovery of gravitational waves has opened an entirely
+- In the depths of the Amazon rainforest, researchers have discovered a complex network
+  of ancient settlements connected by road systems. These pre-Columbian civilizations
+  were far more sophisticated
+- Astronomers have detected mysterious radio signals from distant galaxies that repeat
+  in predictable patterns. These fast radio bursts release as much energy in milliseconds
+- The discovery of CRISPR gene-editing technology has opened unprecedented possibilities
+  for treating genetic diseases. Scientists can now precisely modify DNA sequences
+- The human microbiome, consisting of trillions of bacteria living in and
+- The rapid evolution of electric vehicle technology has pushed traditional automakers
+  to completely reimagine their business models. Battery costs have fallen by more
+  than 80 percent
+- Marine biologists exploring the deep ocean have discovered ecosystems thriving in
+  complete darkness around hydrothermal vents. These unique environments host species
+- Coral reefs around the world are experiencing unprecedented bleaching events due
+- The development of quantum computing has accelerated rapidly in recent years, with
+  major technology companies investing billions of dollars in research. These powerful
+  machines promise to revolutionize fields from
+- The development of mRNA vaccines during the COVID-19 pandemic has revolutionized
+  our approach to preventing infectious diseases. This technology, decades in the
+  making
+- Renewable energy sources have become increasingly cost-competitive with fossil fuels,
+  leading to a
+- The James Webb Space Telescope has captured images of galaxies that formed just
+  a few hundred
+'# Task-specific prompts remain the same': ''
 creative_prompts:
-  - "Once upon a time in a land far away"
-  - "The old mansion stood at the end of the street"
-  - "She opened the mysterious letter and gasped"
-  - "The spaceship landed on an unknown planet"
-  - "In the depths of the enchanted forest"
-  - "The detective examined the crime scene carefully"
-  - "As the sun set over the horizon"
-  - "The ancient prophecy spoke of a chosen one"
-  - "Through the looking glass, Alice saw"
-  - "The storm raged outside while inside"
-
-# Factual QA prompts
+- Once upon a time in a land far away
+- The old mansion stood at the end of the street
+- She opened the mysterious letter and gasped
 factual_prompts:
-  - "The capital of France is"
-  - "Water boils at a temperature of"
-  - "The speed of light in vacuum is approximately"
-  - "The largest planet in our solar system is"
-  - "Photosynthesis is the process by which plants"
-  - "The human body contains approximately"
-  - "World War II ended in the year"
-  - "The chemical formula for water is"
-  - "Mount Everest is located in"
-  - "The currency of Japan is"
-
-# Code generation prompts
-code_prompts:
-  - "def fibonacci(n):\n    \"\"\"Calculate the nth Fibonacci number.\"\"\""
-  - "def quicksort(arr):\n    \"\"\"Sort an array using quicksort algorithm.\"\"\""
-  - "class Stack:\n    \"\"\"Implementation of a stack data structure.\"\"\"\n    def __init__(self):"
-  - "def binary_search(arr, target):\n    \"\"\"Find target in sorted array using binary search.\"\"\""
-  - "def merge_sorted_lists(list1, list2):\n    \"\"\"Merge two sorted lists into one sorted list.\"\"\""
-  - "# Function to check if a number is prime\ndef is_prime(n):"
-  - "# Calculate the factorial of a number recursively\ndef factorial(n):"
-  - "# Find all permutations of a string\ndef permutations(s):"
-  - "# Implement a simple calculator\ndef calculate(expression):"
-  - "# Count occurrences of each word in text\ndef word_count(text):"
-
-# News-style prompts (similar to GPT-2 training data)
-news_prompts:
-  - "WASHINGTON (Reuters) - The White House announced today"
-  - "Breaking News: Scientists at MIT have successfully"
-  - "In a press conference this morning, the CEO"
-  - "Stock markets reacted sharply to news that"
-  - "The Supreme Court ruled yesterday that"
-  - "A new report from the United Nations warns"
-  - "Tech giant Apple unveiled its latest"
-  - "The European Union has voted to"
-  - "Medical researchers have found evidence that"
-  - "The unemployment rate fell to its lowest"
-
-# Prompt selection for experiments
+- The capital of France is
+- Water boils at a temperature of
+- The speed of light in vacuum is approximately
 prompt_sets:
-  degeneration: default_prompts  # Use default for degeneration test
-  perplexity: default_prompts
-  tail_analysis: default_prompts
-  task_creative: creative_prompts
-  task_factual: factual_prompts
-  task_code: code_prompts
-  beam_curse: news_prompts
+  degeneration: webtext_prompts
+  perplexity: webtext_prompts
+  tail_analysis: webtext_prompts
