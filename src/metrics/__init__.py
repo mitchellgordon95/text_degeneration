@@ -6,7 +6,8 @@ from .repetition import (
 from .diversity import (
     compute_self_bleu,
     distinct_n_grams,
-    compute_entropy
+    compute_entropy,
+    vocabulary_diversity
 )
 from .perplexity import (
     compute_perplexity,
@@ -24,6 +25,7 @@ __all__ = [
     "compute_self_bleu",
     "distinct_n_grams",
     "compute_entropy",
+    "vocabulary_diversity",
     "compute_perplexity",
     "compute_perplexity_gap",
     "measure_coherence",

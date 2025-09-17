@@ -2,6 +2,7 @@
 
 from typing import List, Dict, Any
 import numpy as np
+import pandas as pd
 from tqdm import tqdm
 
 from .base_experiment import BaseExperiment
@@ -148,7 +149,7 @@ class DegenerationExperiment(BaseExperiment):
 
         return params
 
-    def analyze_results(self) -> pd.DataFrame:
+    def analyze_results(self):
         """Create analysis DataFrame comparing methods."""
         import pandas as pd
 

@@ -1,0 +1,44 @@
+{
+  "gpt2": {
+    "greedy": {
+      "outputs": [
+        "made it possible to create a new kind of artificial intelligence, one that can be used to solve complex problems.\n\nThe new AI is called Deep Learning, and it is a new kind of artificial intelligence that can be used to solve complex problems.\n\nThe new AI is called Deep Learning, and it is a new kind of artificial intelligence that can be used to solve complex problems.\n\nThe new AI is called Deep Learning, and it is a new kind of artificial intelligence that can be used to solve complex problems.\n\nThe new AI is called Deep Learning, and it is a new kind of artificial intelligence that can be used to solve complex problems.\n\nThe new AI is called Deep Learning, and it is a new kind of artificial intelligence that can be used to solve complex problems.\n\nThe new AI is called Deep Learning, and it is a new kind of artificial intelligence that can be used to solve complex problems.\n\nThe new AI is called Deep Learning, and it is a new kind of artificial intelligence that can be used to solve complex problems.\n\nThe new AI is called Deep Learning, and it is a new kind of artificial intelligence that can be used to solve complex problems.\n\nThe new AI is called Deep Learning,",
+        "bacteria that can grow in the soil of the Earth's oceans.\n\nThe bacteria, called Pseudomonas aeruginosa, are found in the soil of the Pacific Northwest, and are found in the soil of the Great Lakes region of the United States.\n\nThe bacteria are found in the soil of the Great Lakes region of the United States.\n\nThe bacteria are found in the soil of the Great Lakes region of the United States.\n\nThe bacteria are found in the soil of the Great Lakes region of the United States.\n\nThe bacteria are found in the soil of the Great Lakes region of the United States.\n\nThe bacteria are found in the soil of the Great Lakes region of the United States.\n\nThe bacteria are found in the soil of the Great Lakes region of the United States.\n\nThe bacteria are found in the soil of the Great Lakes region of the United States.\n\nThe bacteria are found in the soil of the Great Lakes region of the United States.\n\nThe bacteria are found in the soil of the Great Lakes region of the United States.\n\nThe bacteria are found in the soil of the Great Lakes region of the United States.\n\nThe bacteria are found in the soil of the Great"
+      ],
+      "metrics": {
+        "repetition_rate": 83.451536643026,
+        "self_bleu": 0.0031479129183422227,
+        "texts_with_repetition": 100.0,
+        "max_repetition_in_text": 14,
+        "distinct_1": 0.10722610722610723,
+        "distinct_2": 0.1451990632318501,
+        "distinct_3": 0.15764705882352942,
+        "type_token_ratio": 0.1048951048951049,
+        "vocabulary_size": 45,
+        "avg_length": 214.5,
+        "num_outputs": 2
+      },
+      "timestamp": "2025-09-16T20:42:38.632268"
+    },
+    "nucleus_0.95": {
+      "outputs": [
+        "made it possible to design and test powerful computer networks. These advances are so promising, even if we know not how they will work. They are important for realizing and even more important than the development of deep learning, because they enable us to build algorithms for many very large domains that the computer can't otherwise do.\"\n\nOn how these developments will affect the future of AI, said the scientist: \"Our understanding of the role of language and machine learning will become important, because it allows the machine learning to interact with people more accurately. It also allows the machine to be designed to understand human behaviour more efficiently.\"\n\nThe research will be published in the journal Nature Communications.\n\nSource: Nature Communications",
+        "water bird.\n\nThe species of water bird known as lorociraptor was named the \"dinosaur,\" after one of the dinosaurs that is now extinct. A species of lizard in North America can be found in areas ranging from Texas to the Mississippi River valley. The species is known to live underground, but its existence is thought to be confined to one of two locations \u2014 the interior and the subterranean.\n\nThe research, published online June 8 in Nature Conservation, suggests a new species of lorociraptor. This new species has been described in abundance on a massive scale but is very small compared to its surroundings. This new water bird, named the \"dinosaur\" because he was described earlier this month as having a head like that of the dinosaur.\n\nLorociraptor is known to live on water. (Credit: Courtesy of David Cramer)\n\nThe lorociraptor was discovered in North America about 6 million years ago. That study found that the water bird had a similar coloration to the water creature it inhabits today. Water birds have a pale blue tusk and a dark red tusk.\n\nBut researchers are not sure of how this new species was able to reproduce."
+      ],
+      "metrics": {
+        "repetition_rate": 0.3215434083601286,
+        "self_bleu": 0.004815685468829928,
+        "texts_with_repetition": 50.0,
+        "max_repetition_in_text": 2,
+        "distinct_1": 0.6025236593059937,
+        "distinct_2": 0.9238095238095239,
+        "distinct_3": 0.987220447284345,
+        "type_token_ratio": 0.5678233438485805,
+        "vocabulary_size": 180,
+        "avg_length": 158.5,
+        "num_outputs": 2
+      },
+      "timestamp": "2025-09-16T20:42:47.591559"
+    }
+  }
+}

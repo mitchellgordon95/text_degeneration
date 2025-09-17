@@ -1,6 +1,6 @@
 """Track API costs across experiments."""
 
-from typing import Dict
+from typing import Dict, Any
 from datetime import datetime
 
 
