@@ -1,0 +1,81 @@
+# Experiment configurations
+
+experiments:
+  degeneration:
+    description: "Test repetition rates across models and methods (Holtzman et al. 2019)"
+    models:
+      - gpt2-large
+      - gpt-3.5-turbo-instruct
+      - gpt-4
+      - claude-3-5-sonnet-20241022
+    methods:
+      - greedy
+      - beam_5
+      - beam_10
+      - nucleus_0.95
+      - nucleus_0.9
+      - top_k_50
+    num_samples: 200  # Number of prompts to use
+    max_length: 256   # Max tokens to generate
+    n_gram_size: 4    # For repetition measurement
+
+  perplexity_calibration:
+    description: "Test perplexity gap between generated and human text"
+    models:
+      - gpt2-large
+      - gpt-4
+      - claude-3-5-sonnet-20241022
+    methods:
+      - beam_10
+      - nucleus_0.95
+    num_samples: 500
+    max_length: 256
+
+  tail_analysis:
+    description: "Test reliability of low-probability tokens"
+    models:
+      - gpt2-large
+      - gpt-4
+      - claude-3-5-sonnet-20241022
+    probability_ranges:
+      head: [0.0, 0.1]     # Top 10% probability mass
+      middle: [0.1, 0.5]   # 10-50% probability mass
+      tail: [0.95, 1.0]    # Bottom 5% probability mass
+    samples_per_range: 20
+    max_length: 100
+
+  task_specific:
+    description: "Test optimal methods for different task types"
+    models:
+      - gpt-4
+      - claude-3-5-sonnet-20241022
+    methods:
+      - greedy
+      - beam_10
+      - nucleus_0.95
+    tasks:
+      creative:
+        prompts_file: "prompts/creative.txt"
+        num_samples: 50
+      factual:
+        prompts_file: "prompts/factual.txt"
+        num_samples: 50
+      code:
+        prompts_file: "prompts/code.txt"
+        num_samples: 50
+
+  beam_curse:
+    description: "Test if quality decreases with larger beam sizes"
+    models:
+      - gpt2-large
+      - gpt-4
+    beam_sizes: [1, 2, 5, 10, 20, 50]
+    num_samples: 100
+    max_length: 256
+
+# Default parameters for all experiments
+defaults:
+  temperature: 1.0
+  top_p: 0.95
+  top_k: 50
+  seed: 42

@@ -1,0 +1,30 @@
+# Core dependencies
+numpy>=1.24.0
+pandas>=2.0.0
+tqdm>=4.65.0
+pyyaml>=6.0
+
+# Models
+openai>=1.0.0
+anthropic>=0.18.0
+transformers>=4.35.0
+torch>=2.0.0
+accelerate>=0.24.0
+
+# Metrics
+nltk>=3.8
+scikit-learn>=1.3.0
+scipy>=1.11.0
+
+# Evaluation
+sacrebleu>=2.3.0  # For BLEU
+rouge-score>=0.1.2  # For ROUGE
+
+# Visualization
+matplotlib>=3.7.0
+seaborn>=0.12.0
+
+# Optional but recommended
+python-dotenv>=1.0.0  # For environment variables
+rich>=13.0.0  # For better console output
+tenacity>=8.2.0  # For retrying API calls

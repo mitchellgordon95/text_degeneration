@@ -1,0 +1,86 @@
+# Test prompts for experiments
+
+# Default prompts (WebText-style, similar to Holtzman et al.)
+default_prompts:
+  - "The recent advances in artificial intelligence have"
+  - "Scientists have discovered a new species of"
+  - "The impact of climate change on global"
+  - "In a surprising turn of events, the company"
+  - "The history of human civilization shows that"
+  - "Researchers at the university have developed"
+  - "The economic implications of this policy are"
+  - "According to recent studies, people who"
+  - "The fundamental principles of democracy include"
+  - "Technology has transformed the way we"
+  - "The relationship between education and success"
+  - "In the field of medicine, breakthrough discoveries"
+  - "The role of social media in modern society"
+  - "Archaeological evidence suggests that ancient civilizations"
+  - "The psychological effects of isolation can"
+  - "Environmental conservation efforts have focused on"
+  - "The future of transportation will likely involve"
+  - "Cultural differences between nations often manifest"
+  - "The human brain processes information through"
+  - "Economic theories suggest that market forces"
+
+# Creative writing prompts
+creative_prompts:
+  - "Once upon a time in a land far away"
+  - "The old mansion stood at the end of the street"
+  - "She opened the mysterious letter and gasped"
+  - "The spaceship landed on an unknown planet"
+  - "In the depths of the enchanted forest"
+  - "The detective examined the crime scene carefully"
+  - "As the sun set over the horizon"
+  - "The ancient prophecy spoke of a chosen one"
+  - "Through the looking glass, Alice saw"
+  - "The storm raged outside while inside"
+
+# Factual QA prompts
+factual_prompts:
+  - "The capital of France is"
+  - "Water boils at a temperature of"
+  - "The speed of light in vacuum is approximately"
+  - "The largest planet in our solar system is"
+  - "Photosynthesis is the process by which plants"
+  - "The human body contains approximately"
+  - "World War II ended in the year"
+  - "The chemical formula for water is"
+  - "Mount Everest is located in"
+  - "The currency of Japan is"
+
+# Code generation prompts
+code_prompts:
+  - "def fibonacci(n):\n    \"\"\"Calculate the nth Fibonacci number.\"\"\""
+  - "def quicksort(arr):\n    \"\"\"Sort an array using quicksort algorithm.\"\"\""
+  - "class Stack:\n    \"\"\"Implementation of a stack data structure.\"\"\"\n    def __init__(self):"
+  - "def binary_search(arr, target):\n    \"\"\"Find target in sorted array using binary search.\"\"\""
+  - "def merge_sorted_lists(list1, list2):\n    \"\"\"Merge two sorted lists into one sorted list.\"\"\""
+  - "# Function to check if a number is prime\ndef is_prime(n):"
+  - "# Calculate the factorial of a number recursively\ndef factorial(n):"
+  - "# Find all permutations of a string\ndef permutations(s):"
+  - "# Implement a simple calculator\ndef calculate(expression):"
+  - "# Count occurrences of each word in text\ndef word_count(text):"
+
+# News-style prompts (similar to GPT-2 training data)
+news_prompts:
+  - "WASHINGTON (Reuters) - The White House announced today"
+  - "Breaking News: Scientists at MIT have successfully"
+  - "In a press conference this morning, the CEO"
+  - "Stock markets reacted sharply to news that"
+  - "The Supreme Court ruled yesterday that"
+  - "A new report from the United Nations warns"
+  - "Tech giant Apple unveiled its latest"
+  - "The European Union has voted to"
+  - "Medical researchers have found evidence that"
+  - "The unemployment rate fell to its lowest"
+
+# Prompt selection for experiments
+prompt_sets:
+  degeneration: default_prompts  # Use default for degeneration test
+  perplexity: default_prompts
+  tail_analysis: default_prompts
+  task_creative: creative_prompts
+  task_factual: factual_prompts
+  task_code: code_prompts
+  beam_curse: news_prompts

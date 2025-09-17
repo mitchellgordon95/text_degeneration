@@ -6,6 +6,23 @@ This repository contains experiments testing whether findings from "The Curious 
 
 **Do modern LLMs (GPT-4, Claude-3.5, Llama-3) trained with RLHF still exhibit the text degeneration problems identified in 2019?**
 
+## Quick Start
+
+```bash
+# Install dependencies
+pip install -r requirements.txt
+
+# Set up API keys
+cp .env.example .env
+# Edit .env with your API keys
+
+# Run degeneration experiment
+python run.py --experiment degeneration --models gpt2-large gpt-4
+
+# Dry run to see what would be executed
+python run.py --experiment degeneration --dry-run
+```
+
 ## Key Experiments
 
 1. **Beam Search Degeneration**: Does beam search still cause ~29% repetition?
@@ -17,26 +34,71 @@ This repository contains experiments testing whether findings from "The Curious 
 ## Repository Structure
 
 ```
-├── EXPERIMENTS.md              # Detailed experimental protocol
-├── implementation_plan.md      # Technical implementation details
-├── human_evaluation_protocol.md # Human eval protocol (if needed)
-├── research_report.md          # Original analysis being tested
-└── src/                       # Implementation (coming soon)
+├── config/
+│   ├── experiments.yaml       # Experiment configurations
+│   ├── models.yaml           # Model settings
+│   └── prompts.yaml          # Test prompts
+├── src/
+│   ├── models/               # Unified model interface
+│   ├── metrics/              # Evaluation metrics
+│   ├── experiments/          # Experiment implementations
+│   └── utils/                # Utilities
+├── outputs/                  # Results (auto-created)
+├── EXPERIMENTS.md            # Detailed protocol
+└── run.py                    # Main runner
 ```
+
+## Usage
+
+### Basic Run
+```bash
+# Run with default settings
+python run.py --experiment degeneration
+
+# Specify models
+python run.py --experiment degeneration --models gpt2-large gpt-4 claude-3-5-sonnet-20241022
+
+# Specify methods
+python run.py --experiment degeneration --methods greedy beam_10 nucleus_0.95
+
+# Limit samples (for testing)
+python run.py --experiment degeneration --num-samples 10
+```
+
+### Configuration
+
+Models and experiments are configured in YAML files:
+- `config/experiments.yaml` - Experiment parameters
+- `config/models.yaml` - Model configurations
+- `config/prompts.yaml` - Test prompts
+
+### Outputs
+
+Results are saved to `outputs/`:
+- `raw/` - Generated texts
+- `metrics/` - Computed metrics
+- `degeneration_results.json` - Aggregated results
+- `degeneration_summary.csv` - Summary table
+
+## Requirements
+
+- Python 3.8+
+- CUDA GPU (optional, for local models)
+- API keys for OpenAI/Anthropic
 
 ## Status
 
 - [x] Experimental design complete
-- [x] Implementation architecture planned
-- [ ] Code implementation
+- [x] Implementation complete
 - [ ] Experiments run
 - [ ] Results analyzed
 
-## Expected Timeline
+## Expected Costs
 
-- Week 1: Implementation and setup
-- Week 2: Run experiments and analysis
-- Total cost: ~$50 in API calls
+- GPT-4: ~$20
+- Claude-3.5: ~$10
+- GPT-3.5: ~$5
+- **Total: ~$35-50**
 
 ## References
 
