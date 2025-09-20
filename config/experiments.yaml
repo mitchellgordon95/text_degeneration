@@ -5,11 +5,14 @@ experiments:
   degeneration_local:
     description: "Test repetition rates for local models with all methods (Holtzman et al. 2019)"
     models:
-      - gpt2-large      # Verified working
-      # Large models (may require HF auth)
-      # - llama3-70b
-      # - qwen2.5-72b
-      # - mixtral-8x7b
+      - gpt2           # Fast baseline
+      - gpt2-large     # Verified working
+      - qwen2.5-7b     # Modern 7B model
+      - qwen2.5-72b    # Large model verified working
+      - mixtral-8x7b   # MoE architecture verified working
+      - mistral-7b     # Awaiting access
+      - mistral-small-3-24b  # Awaiting access
+      - llama3-70b     # Awaiting access
     methods:
       - greedy
       - beam_5
@@ -25,7 +28,7 @@ experiments:
     description: "Test repetition rates for OpenAI models (limited methods)"
     models:
       - gpt-4           # Verified working
-      # - gpt-5         # Uncomment when accessible
+      - gpt-5           # Will be available soon
     methods:
       - greedy
       - nucleus_0.95
@@ -39,7 +42,7 @@ experiments:
     description: "Test repetition rates for Anthropic models (very limited methods)"
     models:
       - claude-3-5-sonnet-20241022  # Verified working
-      # - claude-4-opus              # Uncomment when accessible
+      - claude-4-opus               # Will be available soon
     methods:
       - greedy
       - nucleus_0.95
@@ -53,10 +56,14 @@ experiments:
   perplexity_local:
     description: "Test perplexity gap for local models (full logprobs)"
     models:
-      - gpt2-large
-      - llama3-70b
-      - qwen2.5-72b
-      - mixtral-8x7b
+      - gpt2           # Fast baseline
+      - gpt2-large     # Verified working
+      - qwen2.5-7b     # Modern 7B model
+      - qwen2.5-72b    # Large model verified working
+      - mixtral-8x7b   # MoE architecture verified working
+      - mistral-7b     # Awaiting access
+      - mistral-small-3-24b  # Awaiting access
+      - llama3-70b     # Awaiting access
     methods:
       - beam_10
       - nucleus_0.95
@@ -76,7 +83,14 @@ experiments:
   tail_analysis:
     description: "Test reliability of low-probability tokens (local models only)"
     models:
-      - gpt2-large  # Only models with full vocab access
+      - gpt2           # Fast baseline
+      - gpt2-large     # Verified working
+      - qwen2.5-7b     # Modern 7B model
+      - qwen2.5-72b    # Large model verified working
+      - mixtral-8x7b   # MoE architecture verified working
+      - mistral-7b     # Awaiting access
+      - mistral-small-3-24b  # Awaiting access
+      - llama3-70b     # Awaiting access
     probability_ranges:
       head: [0.0, 0.1]     # Top 10% probability mass
       middle: [0.1, 0.5]   # 10-50% probability mass
@@ -113,11 +127,14 @@ experiments:
     description: "Test if quality decreases with larger beam sizes"
     models:
       # Only open source models support beam search
-      - gpt2-large
-      - llama3-70b
-      - qwen2.5-72b
-      - mixtral-8x7b
-      - mistral-small-3-24b
+      - gpt2           # Fast baseline
+      - gpt2-large     # Verified working
+      - qwen2.5-7b     # Modern 7B model
+      - qwen2.5-72b    # Large model verified working
+      - mixtral-8x7b   # MoE architecture verified working
+      - mistral-7b     # Awaiting access
+      - mistral-small-3-24b  # Awaiting access
+      - llama3-70b     # Awaiting access
     beam_sizes: [1, 2, 5, 10, 20, 50]
     num_samples: 100
     max_length: 256

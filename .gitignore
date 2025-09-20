@@ -27,10 +27,7 @@ config/secrets.yaml
 .cache/
 *.cache
 
-# Outputs (can be large)
-outputs/raw/
-outputs/metrics/
-outputs/verification_report.json
+# Outputs (checkpoints only - results are committed for science!)
 *.pkl
 *.pickle
 
