@@ -10,6 +10,7 @@ anthropic>=0.18.0
 transformers>=4.35.0
 torch>=2.0.0
 accelerate>=0.24.0
+bitsandbytes>=0.44.0  # For 8-bit quantization
 
 # Metrics
 nltk>=3.8

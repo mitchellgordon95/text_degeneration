@@ -75,11 +75,11 @@ models:
 
   llama3-70b:
     type: huggingface
-    model_id: meta-llama/Meta-Llama-3.3-70B-Instruct  # Latest 3.3 version
+    model_id: meta-llama/Llama-3.3-70B-Instruct  # December 2024 release
     device: auto
     load_in_8bit: true  # Required for most GPUs
 
-  # Qwen models (Alibaba)
+  # Qwen models (Alibaba) - September 2024 release
   qwen2.5-7b:
     type: huggingface
     model_id: Qwen/Qwen2.5-7B-Instruct
@@ -88,7 +88,7 @@ models:
 
   qwen2.5-72b:
     type: huggingface
-    model_id: Qwen/Qwen2.5-72B-Instruct
+    model_id: Qwen/Qwen2.5-72B-Instruct  # September 2024 release
     device: auto
     load_in_8bit: true  # Requires 80GB+ VRAM without quantization
 
@@ -101,13 +101,13 @@ models:
 
   mistral-small-3-24b:
     type: huggingface
-    model_id: mistralai/Mistral-Small-3-24B-Instruct-2501  # January 2025 release
+    model_id: mistralai/Mistral-Small-24B-Instruct-2501  # January 2025 release
     device: auto
     load_in_8bit: true
 
   mixtral-8x7b:
     type: huggingface
-    model_id: mistralai/Mixtral-8x7B-Instruct-v0.1
+    model_id: mistralai/Mixtral-8x7B-Instruct-v0.1  # MoE architecture
     device: auto
     load_in_8bit: true  # MoE architecture, efficient but still large
 

@@ -30,6 +30,7 @@ config/secrets.yaml
 # Outputs (can be large)
 outputs/raw/
 outputs/metrics/
+outputs/verification_report.json
 *.pkl
 *.pickle
 

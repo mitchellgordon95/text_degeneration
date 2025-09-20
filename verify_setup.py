@@ -249,6 +249,19 @@ def test_model(model_name: str, config: Dict, api_status: Dict) -> Dict:
                 results["methods"][method] = {"error": str(e)}
 
         results["status"] = "success"
+
+        # Clean up GPU memory after testing
+        if model_type == "huggingface":
+            try:
+                import gc
+                import torch
+                del model
+                gc.collect()
+                torch.cuda.empty_cache()
+                print(f"  🧹 GPU memory cleaned")
+            except Exception as cleanup_error:
+                print(f"  ⚠️  Memory cleanup warning: {cleanup_error}")
+
         return results
 
     except Exception as e:
@@ -363,12 +376,41 @@ def main():
         ("claude-3-5-sonnet-20241022", {"type": "anthropic", "model_id": "claude-3-5-sonnet-20241022"}),
     ]
 
-    # Add larger local model if GPU available
-    if gpu_info["available"] and gpu_info.get("memory_gb", 0) > 10:
-        models_to_test.append(
-            ("gpt2-large", {"type": "huggingface", "model_id": "gpt2-large"})
-        )
-        print("  💪 GPU detected - including larger models")
+    # Add larger local models based on GPU memory
+    gpu_memory = gpu_info.get("memory_gb", 0)
+
+    if gpu_info["available"]:
+        if gpu_memory > 10:
+            models_to_test.extend([
+                ("gpt2-large", {"type": "huggingface", "model_id": "gpt2-large"}),
+                ("qwen2.5-7b", {"type": "huggingface", "model_id": "Qwen/Qwen2.5-7B-Instruct"}),
+                ("mistral-7b", {"type": "huggingface", "model_id": "mistralai/Mistral-7B-Instruct-v0.3"}),
+            ])
+            print(f"  💪 GPU with {gpu_memory:.1f}GB detected - including medium models")
+
+        if gpu_memory > 30:
+            models_to_test.extend([
+                ("mistral-small-3-24b", {"type": "huggingface", "model_id": "mistralai/Mistral-Small-24B-Instruct-2501", "load_in_8bit": True}),
+            ])
+            print(f"  🔥 Including 24B model")
+
+        if gpu_memory > 70:
+            models_to_test.extend([
+                ("llama3-70b", {"type": "huggingface", "model_id": "meta-llama/Llama-3.3-70B-Instruct", "load_in_8bit": True}),
+                ("qwen2.5-72b", {"type": "huggingface", "model_id": "Qwen/Qwen2.5-72B-Instruct", "load_in_8bit": True}),
+                ("mixtral-8x7b", {"type": "huggingface", "model_id": "mistralai/Mixtral-8x7B-Instruct-v0.1", "load_in_8bit": True}),
+            ])
+            print(f"  🚀 Including 70B+ models")
+
+        # Show what models we're skipping due to memory limitations
+        if gpu_memory <= 10:
+            print(f"  ⚠️  Skipping medium models (need >10GB, have {gpu_memory:.1f}GB)")
+        if gpu_memory <= 30:
+            print(f"  ⚠️  Skipping large models (need >30GB, have {gpu_memory:.1f}GB)")
+        if gpu_memory <= 70:
+            print(f"  ⚠️  Skipping 70B+ models (need >70GB, have {gpu_memory:.1f}GB)")
+    else:
+        print("  ❌ No GPU detected - skipping all local models except gpt2")
 
     results = {}
 
