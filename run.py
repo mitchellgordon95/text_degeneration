@@ -73,9 +73,9 @@ def load_models(model_names, models_config):
     return models
 
 
-def run_degeneration_experiment(config, models, prompts):
+def run_degeneration_experiment(config, models, prompts, experiment_name="degeneration_local"):
     """Run the degeneration (repetition) experiment."""
-    exp_config = config["experiments"]["degeneration"]
+    exp_config = config["experiments"][experiment_name]
 
     # Filter models to only those requested
     experiment_models = {}
@@ -100,8 +100,8 @@ def main():
     parser = argparse.ArgumentParser(description="Run text degeneration experiments")
     parser.add_argument(
         "--experiment",
-        choices=["degeneration", "perplexity", "tail", "task", "beam", "all"],
-        default="degeneration",
+        choices=["degeneration_local", "degeneration_openai", "degeneration_anthropic", "perplexity_local", "perplexity_openai", "tail_analysis", "beam_curse", "all"],
+        default="degeneration_local",
         help="Which experiment to run"
     )
     parser.add_argument(
@@ -212,8 +212,8 @@ def main():
     print(f"\n🚀 Running {exp_name} experiment...")
 
     try:
-        if exp_name == "degeneration":
-            experiment = run_degeneration_experiment(config, models, prompts)
+        if exp_name in ["degeneration_local", "degeneration_openai", "degeneration_anthropic"]:
+            experiment = run_degeneration_experiment(config, models, prompts, exp_name)
 
             if experiment:
                 # Print results summary
@@ -239,8 +239,20 @@ def main():
                 print(f"\nTotal cost: ${experiment.total_cost:.2f}")
                 print(f"Total tokens: {experiment.total_tokens:,}")
 
+        elif exp_name in ["perplexity_local", "perplexity_openai"]:
+            print(f"🚧 {exp_name} experiment not yet implemented")
+            return 1
+
+        elif exp_name == "tail_analysis":
+            print(f"🚧 {exp_name} experiment not yet implemented")
+            return 1
+
+        elif exp_name == "beam_curse":
+            print(f"🚧 {exp_name} experiment not yet implemented")
+            return 1
+
         else:
-            print(f"❌ Experiment {exp_name} not yet implemented")
+            print(f"❌ Unknown experiment: {exp_name}")
             return 1
 
     except KeyboardInterrupt:

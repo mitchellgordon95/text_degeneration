@@ -16,6 +16,7 @@ import sys
 import os
 import time
 import statistics
+import yaml
 from pathlib import Path
 from typing import Dict, List, Optional, Tuple
 import traceback
@@ -366,40 +367,31 @@ def main():
     # Test models
     print("🧪 Testing models...")
 
-    # Define models to test
-    models_to_test = [
-        # Small local model (should work on most systems)
-        ("gpt2", {"type": "huggingface", "model_id": "gpt2"}),
+    # Load models configuration
+    try:
+        with open("config/models.yaml", 'r') as f:
+            models_config = yaml.safe_load(f)["models"]
+    except Exception as e:
+        print(f"❌ Failed to load models config: {e}")
+        return
 
-        # API models (if keys available)
-        ("gpt-4", {"type": "openai", "model_id": "gpt-4"}),
-        ("claude-3-5-sonnet-20241022", {"type": "anthropic", "model_id": "claude-3-5-sonnet-20241022"}),
-    ]
-
-    # Add larger local models based on GPU memory
+    # Define models to test based on GPU memory
     gpu_memory = gpu_info.get("memory_gb", 0)
+
+    # Always test these core models
+    models_to_test = ["gpt2", "gpt-4", "claude-3-5-sonnet-20241022"]
 
     if gpu_info["available"]:
         if gpu_memory > 10:
-            models_to_test.extend([
-                ("gpt2-large", {"type": "huggingface", "model_id": "gpt2-large"}),
-                ("qwen2.5-7b", {"type": "huggingface", "model_id": "Qwen/Qwen2.5-7B-Instruct"}),
-                ("mistral-7b", {"type": "huggingface", "model_id": "mistralai/Mistral-7B-Instruct-v0.3"}),
-            ])
+            models_to_test.extend(["gpt2-large", "qwen2.5-7b", "mistral-7b"])
             print(f"  💪 GPU with {gpu_memory:.1f}GB detected - including medium models")
 
         if gpu_memory > 30:
-            models_to_test.extend([
-                ("mistral-small-3-24b", {"type": "huggingface", "model_id": "mistralai/Mistral-Small-24B-Instruct-2501", "load_in_8bit": True}),
-            ])
+            models_to_test.extend(["mistral-small-3-24b"])
             print(f"  🔥 Including 24B model")
 
         if gpu_memory > 70:
-            models_to_test.extend([
-                ("llama3-70b", {"type": "huggingface", "model_id": "meta-llama/Llama-3.3-70B-Instruct", "load_in_8bit": True}),
-                ("qwen2.5-72b", {"type": "huggingface", "model_id": "Qwen/Qwen2.5-72B-Instruct", "load_in_8bit": True}),
-                ("mixtral-8x7b", {"type": "huggingface", "model_id": "mistralai/Mixtral-8x7B-Instruct-v0.1", "load_in_8bit": True}),
-            ])
+            models_to_test.extend(["llama3-70b", "qwen2.5-72b", "mixtral-8x7b"])
             print(f"  🚀 Including 70B+ models")
 
         # Show what models we're skipping due to memory limitations
@@ -414,7 +406,9 @@ def main():
 
     results = {}
 
-    for model_name, config in models_to_test:
+    for model_name in models_to_test:
+        # Get model config from models.yaml
+        config = models_config.get(model_name, {})
         try:
             result = test_model(model_name, config, api_status)
             results[model_name] = result

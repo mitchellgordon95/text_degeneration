@@ -1,5 +1,11 @@
 # Setup Instructions for Virtual Environment
 
+## 0. System Requirements
+
+- **Disk Space**: ~500GB available for model weights
+- **GPU Memory**: 16GB+ recommended (99GB+ for largest models)
+- **RAM**: 32GB+ recommended for large model loading
+
 ## 1. Create and Activate Virtual Environment
 
 ```bash
@@ -43,32 +49,57 @@ nano .env  # or use your preferred editor
 # Add your keys:
 # OPENAI_API_KEY=sk-...
 # ANTHROPIC_API_KEY=sk-ant-...
+# HUGGINGFACE_TOKEN=hf_...  # Required for gated models
 ```
 
-## 4. Test the Setup
+## 4. Get Access to Gated Models
+
+Many state-of-the-art models require explicit access approval:
 
 ```bash
+# First, run verification to see which models need access
+python verify_setup.py
+
+# The script will show error messages with links for gated models.
+# Visit each link and request access:
+# - https://huggingface.co/meta-llama/Llama-3.3-70B-Instruct
+# - https://huggingface.co/mistralai/Mistral-7B-Instruct-v0.3
+# - https://huggingface.co/mistralai/Mixtral-8x7B-Instruct-v0.1
+# - https://huggingface.co/mistralai/Mistral-Small-24B-Instruct-2501
+
+# Note: Access approval usually takes a few minutes to a few hours
+# Warning: Models will download ~500GB total - ensure adequate disk space!
+```
+
+## 5. Test the Setup
+
+```bash
+# Run comprehensive verification first
+python verify_setup.py
+
 # Do a dry run first to verify everything is configured
-python run.py --experiment degeneration --models gpt2-large --dry-run
+python run.py --experiment degeneration_local --models gpt2-large --dry-run
 
 # Test with a small sample
-python run.py --experiment degeneration --models gpt2-large --num-samples 5 --methods greedy
+python run.py --experiment degeneration_local --models gpt2-large --num-samples 5 --methods greedy
 ```
 
-## 5. Run Full Experiments
+## 6. Run Full Experiments
 
 ```bash
-# Run the main degeneration experiment
-python run.py --experiment degeneration --models gpt2-large gpt-4 claude-3-5-sonnet-20241022
+# Run the main degeneration experiments
+python run.py --experiment degeneration_local    # Local models only
+python run.py --experiment degeneration_openai   # OpenAI models
+python run.py --experiment degeneration_anthropic # Anthropic models
 
-# Or run with specific methods
-python run.py --experiment degeneration --models gpt-4 --methods greedy beam_10 nucleus_0.95
+# Or run with specific models
+python run.py --experiment degeneration_local --models gpt2-large qwen2.5-7b
 
 # Monitor costs with limit
-python run.py --experiment degeneration --cost-limit 10.0
+python run.py --experiment degeneration_openai --cost-limit 10.0
 ```
 
-## 6. Deactivate When Done
+## 7. Deactivate When Done
 
 ```bash
 deactivate
