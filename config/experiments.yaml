@@ -1,53 +1,82 @@
 # Experiment configurations
 
 experiments:
-  degeneration:
-    description: "Test repetition rates across models and methods (Holtzman et al. 2019)"
+  # Split degeneration experiment by model capabilities
+  degeneration_local:
+    description: "Test repetition rates for local models with all methods (Holtzman et al. 2019)"
     models:
-      # Open source models (support all methods including beam search)
+      - gpt2-large      # Verified working
+      # Large models (may require HF auth)
+      # - llama3-70b
+      # - qwen2.5-72b
+      # - mixtral-8x7b
+    methods:
+      - greedy
+      - beam_5
+      - beam_10
+      - nucleus_0.95
+      - nucleus_0.9
+      - top_k_50
+    num_samples: 200
+    max_length: 256
+    n_gram_size: 4
+
+  degeneration_openai:
+    description: "Test repetition rates for OpenAI models (limited methods)"
+    models:
+      - gpt-4           # Verified working
+      # - gpt-5         # Uncomment when accessible
+    methods:
+      - greedy
+      - nucleus_0.95
+      - nucleus_0.9
+      # No beam search, no top_k simulation due to limitations
+    num_samples: 200
+    max_length: 256
+    n_gram_size: 4
+
+  degeneration_anthropic:
+    description: "Test repetition rates for Anthropic models (very limited methods)"
+    models:
+      - claude-3-5-sonnet-20241022  # Verified working
+      # - claude-4-opus              # Uncomment when accessible
+    methods:
+      - greedy
+      - nucleus_0.95
+      - nucleus_0.9
+      # No beam search, no top_k support
+    num_samples: 200
+    max_length: 256
+    n_gram_size: 4
+
+  # Only test perplexity on models that support it
+  perplexity_local:
+    description: "Test perplexity gap for local models (full logprobs)"
+    models:
       - gpt2-large
       - llama3-70b
       - qwen2.5-72b
       - mixtral-8x7b
-      # API models (no beam search support)
-      - gpt-4
-      - gpt-5
-      - claude-3-5-sonnet-20241022
-      - claude-4-opus
-    methods:
-      - greedy
-      - beam_5        # Only for open source models
-      - beam_10       # Only for open source models
-      - nucleus_0.95
-      - nucleus_0.9
-      - top_k_50
-    # Note: Beam search will be skipped for API models
-    num_samples: 200  # Number of prompts to use
-    max_length: 256   # Max tokens to generate
-    n_gram_size: 4    # For repetition measurement
-
-  perplexity_calibration:
-    description: "Test perplexity gap between generated and human text"
-    models:
-      - gpt2-large
-      - gpt-4
-      - gpt-5
-      - claude-3-5-sonnet-20241022
-      - claude-4-opus
     methods:
       - beam_10
       - nucleus_0.95
-    num_samples: 500
+    num_samples: 100  # Reduced for testing
     max_length: 256
 
-  tail_analysis:
-    description: "Test reliability of low-probability tokens"
+  perplexity_openai:
+    description: "Test perplexity gap for OpenAI (approximate, top-5 only)"
     models:
-      - gpt2-large
       - gpt-4
-      - gpt-5
-      - claude-3-5-sonnet-20241022
-      - claude-4-opus
+    methods:
+      - nucleus_0.95  # Skip beam search
+    num_samples: 50   # Reduced due to API costs and limitations
+    max_length: 256
+
+  # Only test tail analysis on models that support full distributions
+  tail_analysis:
+    description: "Test reliability of low-probability tokens (local models only)"
+    models:
+      - gpt2-large  # Only models with full vocab access
     probability_ranges:
       head: [0.0, 0.1]     # Top 10% probability mass
       middle: [0.1, 0.5]   # 10-50% probability mass
@@ -55,27 +84,30 @@ experiments:
     samples_per_range: 20
     max_length: 100
 
-  task_specific:
-    description: "Test optimal methods for different task types"
-    models:
-      - gpt-4
-      - gpt-5
-      - claude-3-5-sonnet-20241022
-      - claude-4-opus
-    methods:
-      - greedy
-      - beam_10
-      - nucleus_0.95
-    tasks:
-      creative:
-        prompts_file: "prompts/creative.txt"
-        num_samples: 50
-      factual:
-        prompts_file: "prompts/factual.txt"
-        num_samples: 50
-      code:
-        prompts_file: "prompts/code.txt"
-        num_samples: 50
+  # Task-specific experiments (commented out for now)
+  # TODO: Need to create proper creative and factual prompt files
+  # - Creative: Story starters, character descriptions, creative scenarios
+  # - Factual: Knowledge questions, fact completion, QA pairs
+  # - Code: Function signatures, algorithmic problems, debugging tasks
+  # task_specific_api:
+  #   description: "Test optimal methods for different task types (API models)"
+  #   models:
+  #     - gpt-4
+  #     - claude-3-5-sonnet-20241022
+  #   methods:
+  #     - greedy
+  #     - nucleus_0.95
+  #     # Removed beam_10 - not supported by API models
+  #   tasks:
+  #     creative:
+  #       prompts_file: "prompts/creative.txt"  # TODO: Create this file
+  #       num_samples: 20  # Reduced for cost
+  #     factual:
+  #       prompts_file: "prompts/factual.txt"   # TODO: Create this file
+  #       num_samples: 20
+  #     code:
+  #       prompts_file: "prompts/code.txt"      # TODO: Create this file
+  #       num_samples: 20
 
   beam_curse:
     description: "Test if quality decreases with larger beam sizes"
