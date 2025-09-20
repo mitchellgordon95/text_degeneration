@@ -34,10 +34,10 @@ outputs/verification_report.json
 *.pkl
 *.pickle
 
-# Model files
+# Model files (downloaded weights)
 *.bin
 *.safetensors
-models/
+models/downloaded/
 
 # IDE
 .vscode/
