@@ -4,19 +4,24 @@ experiments:
   degeneration:
     description: "Test repetition rates across models and methods (Holtzman et al. 2019)"
     models:
+      # Open source models (support all methods including beam search)
       - gpt2-large
-      - gpt-3.5-turbo-instruct
+      - llama3-70b
+      - qwen2.5-72b
+      - mixtral-8x7b
+      # API models (no beam search support)
       - gpt-4
       - gpt-5
       - claude-3-5-sonnet-20241022
       - claude-4-opus
     methods:
       - greedy
-      - beam_5
-      - beam_10
+      - beam_5        # Only for open source models
+      - beam_10       # Only for open source models
       - nucleus_0.95
       - nucleus_0.9
       - top_k_50
+    # Note: Beam search will be skipped for API models
     num_samples: 200  # Number of prompts to use
     max_length: 256   # Max tokens to generate
     n_gram_size: 4    # For repetition measurement
@@ -26,7 +31,9 @@ experiments:
     models:
       - gpt2-large
       - gpt-4
+      - gpt-5
       - claude-3-5-sonnet-20241022
+      - claude-4-opus
     methods:
       - beam_10
       - nucleus_0.95
@@ -38,7 +45,9 @@ experiments:
     models:
       - gpt2-large
       - gpt-4
+      - gpt-5
       - claude-3-5-sonnet-20241022
+      - claude-4-opus
     probability_ranges:
       head: [0.0, 0.1]     # Top 10% probability mass
       middle: [0.1, 0.5]   # 10-50% probability mass
@@ -50,7 +59,9 @@ experiments:
     description: "Test optimal methods for different task types"
     models:
       - gpt-4
+      - gpt-5
       - claude-3-5-sonnet-20241022
+      - claude-4-opus
     methods:
       - greedy
       - beam_10
@@ -69,8 +80,12 @@ experiments:
   beam_curse:
     description: "Test if quality decreases with larger beam sizes"
     models:
+      # Only open source models support beam search
       - gpt2-large
-      - gpt-4
+      - llama3-70b
+      - qwen2.5-72b
+      - mixtral-8x7b
+      - mistral-small-3-24b
     beam_sizes: [1, 2, 5, 10, 20, 50]
     num_samples: 100
     max_length: 256

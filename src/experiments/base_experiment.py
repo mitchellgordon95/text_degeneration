@@ -75,6 +75,16 @@ class BaseExperiment:
                     print(f"  Skipping {method} (already completed)")
                     continue
 
+                # Check if model supports this method
+                if not model.can_use_method(method):
+                    print(f"  ERROR: {model_name} does not support {method}")
+                    print(f"    Supported methods: {', '.join(model.supported_methods)}")
+                    # Fail fast - don't silently skip
+                    raise ValueError(
+                        f"Model {model_name} does not support method {method}. "
+                        f"This is a configuration error - please update experiments.yaml"
+                    )
+
                 # Generate outputs - let errors propagate
                 print(f"  Generating with {method}...")
                 outputs = self.generate_outputs(model, method)

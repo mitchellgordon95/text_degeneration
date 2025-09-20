@@ -69,15 +69,60 @@ models:
   # Llama models (HuggingFace)
   llama3-8b:
     type: huggingface
-    model_id: meta-llama/Meta-Llama-3-8B
+    model_id: meta-llama/Meta-Llama-3-8B-Instruct
     device: auto
     load_in_8bit: true  # Recommended for consumer GPUs
 
   llama3-70b:
     type: huggingface
-    model_id: meta-llama/Meta-Llama-3-70B
+    model_id: meta-llama/Meta-Llama-3.3-70B-Instruct  # Latest 3.3 version
     device: auto
     load_in_8bit: true  # Required for most GPUs
+
+  # Qwen models (Alibaba)
+  qwen2.5-7b:
+    type: huggingface
+    model_id: Qwen/Qwen2.5-7B-Instruct
+    device: auto
+    load_in_8bit: false
+
+  qwen2.5-72b:
+    type: huggingface
+    model_id: Qwen/Qwen2.5-72B-Instruct
+    device: auto
+    load_in_8bit: true  # Requires 80GB+ VRAM without quantization
+
+  # Mistral models
+  mistral-7b:
+    type: huggingface
+    model_id: mistralai/Mistral-7B-Instruct-v0.3
+    device: auto
+    load_in_8bit: false
+
+  mistral-small-3-24b:
+    type: huggingface
+    model_id: mistralai/Mistral-Small-3-24B-Instruct-2501  # January 2025 release
+    device: auto
+    load_in_8bit: true
+
+  mixtral-8x7b:
+    type: huggingface
+    model_id: mistralai/Mixtral-8x7B-Instruct-v0.1
+    device: auto
+    load_in_8bit: true  # MoE architecture, efficient but still large
+
+  # DeepSeek models
+  deepseek-7b:
+    type: huggingface
+    model_id: deepseek-ai/deepseek-llm-7b-chat
+    device: auto
+    load_in_8bit: false
+
+  deepseek-67b:
+    type: huggingface
+    model_id: deepseek-ai/deepseek-llm-67b-chat
+    device: auto
+    load_in_8bit: true
 
 # Cost tracking settings
 cost_tracking:

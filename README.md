@@ -9,19 +9,48 @@ This repository contains experiments testing whether findings from "The Curious 
 ## Quick Start
 
 ```bash
-# Install dependencies
+# 1. Install dependencies
 pip install -r requirements.txt
 
-# Set up API keys
+# 2. Set up API keys
 cp .env.example .env
-# Edit .env with your API keys
+# Edit .env with your API keys:
+#   OPENAI_API_KEY=sk-your-openai-key-here
+#   ANTHROPIC_API_KEY=sk-ant-your-anthropic-key-here
 
-# Run degeneration experiment
-python run.py --experiment degeneration --models gpt2-large gpt-4
+# 3. Verify everything works
+python verify_setup.py
+
+# 4. Run experiments
+python run.py --experiment degeneration --models gpt2-large llama3-70b gpt-5
 
 # Dry run to see what would be executed
 python run.py --experiment degeneration --dry-run
 ```
+
+## Setup Verification
+
+Before running experiments, verify your setup:
+
+```bash
+python verify_setup.py
+```
+
+This script checks:
+- ✅ Dependencies installed
+- ✅ GPU availability
+- ✅ API keys configured
+- ✅ Models load correctly
+- ⚡ Speed benchmarks
+
+The script will tell you exactly what's missing and how to fix it.
+
+## Important: API Limitations
+
+**OpenAI and Anthropic APIs don't support beam search.** See [API_LIMITATIONS.md](API_LIMITATIONS.md) for details.
+- OpenAI only provides top-5 logprobs
+- Anthropic provides no logprobs at all
+- Beam search experiments use only open source models
 
 ## Key Experiments
 
@@ -56,7 +85,7 @@ python run.py --experiment degeneration --dry-run
 python run.py --experiment degeneration
 
 # Specify models
-python run.py --experiment degeneration --models gpt2-large gpt-4 claude-3-5-sonnet-20241022
+python run.py --experiment degeneration --models gpt2-large llama3-70b gpt-5 claude-4-opus
 
 # Specify methods
 python run.py --experiment degeneration --methods greedy beam_10 nucleus_0.95
