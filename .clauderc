@@ -1,0 +1,32 @@
+# Claude Code Configuration for Text Degeneration Project
+
+# Auto-run verification before any substantive changes
+verification_required=true
+
+# Key files that trigger verification requirement
+trigger_files=[
+    "config/models.yaml",
+    "config/experiments.yaml",
+    "src/models/*.py",
+    "src/utils/capabilities.py"
+]
+
+# Required commands before commits
+pre_commit_commands=[
+    "python verify_setup.py"
+]
+
+# Default linting/validation commands
+validation_commands=[
+    "python validate_config.py",
+    "python verify_setup.py"
+]
+
+# Project-specific principles
+principles=[
+    "ZERO_TOLERANCE_FOR_SILENT_FALLBACKS",
+    "STRICT_PARAMETER_ISOLATION",
+    "CONFIGURATION_DRIVEN_CAPABILITIES",
+    "FAIL_FAST_WITH_ACTIONABLE_ERRORS",
+    "ACADEMIC_GRADE_RIGOR"
+]
