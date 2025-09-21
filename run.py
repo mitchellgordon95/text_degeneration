@@ -50,48 +50,34 @@ def setup_environment():
     return available_apis
 
 
-def load_models(model_names, models_config):
-    """Load specified models."""
-    models = {}
+def filter_available_models(model_names, models_config):
+    """Filter models to only those that have configurations."""
+    available_models = []
 
     for model_name in model_names:
-        print(f"Loading {model_name}...")
-        try:
-            # Get model config if available
-            model_config = models_config.get(model_name, {})
+        if model_name in models_config:
+            available_models.append(model_name)
+        else:
+            print(f"⚠️  Model {model_name} not found in config, skipping")
 
-            # Create model
-            model = UnifiedModel.create(model_name, **model_config)
-            models[model_name] = model
-            print(f"✓ {model_name} loaded")
-
-        except Exception as e:
-            print(f"✗ Failed to load {model_name}: {e}")
-            if "API key" in str(e):
-                print("  (Check your API keys)")
-
-    return models
+    return available_models
 
 
-def run_degeneration_experiment(config, models, prompts, experiment_name="degeneration_local"):
+def run_degeneration_experiment(config, model_names, models_config, prompts, experiment_name="degeneration_local"):
     """Run the degeneration (repetition) experiment."""
     exp_config = config["experiments"][experiment_name]
 
-    # Filter models to only those requested
-    experiment_models = {}
-    for model_name in exp_config["models"]:
-        if model_name in models:
-            experiment_models[model_name] = models[model_name]
-        else:
-            print(f"⚠️  Model {model_name} not available, skipping")
+    # Filter to requested models that are in config
+    requested_models = exp_config["models"]
+    available_models = filter_available_models(requested_models, models_config)
 
-    if not experiment_models:
+    if not available_models:
         print("❌ No models available for experiment")
         return None
 
     # Create and run experiment
     experiment = DegenerationExperiment(exp_config, prompts)
-    results = experiment.run(experiment_models)
+    results = experiment.run(available_models, models_config)
 
     return experiment
 
@@ -158,7 +144,7 @@ def main():
     # Load configurations
     print("\nLoading configurations...")
     config = load_config(args.config)
-    models_config = load_config(args.models_config)
+    models_config = load_config(args.models_config)["models"]
 
     # Load prompts
     print("Loading prompts...")
@@ -191,21 +177,12 @@ def main():
         print(f"Max length: {exp_config.get('max_length', 256)}")
         return 0
 
-    # Load models
-    print("\nLoading models...")
-    models = load_models(exp_config["models"], models_config)
-
-    if not models:
-        print("❌ No models could be loaded")
-        return 1
-
-
     # Run experiment
     print(f"\n🚀 Running {exp_name} experiment...")
 
     try:
         if exp_name in ["degeneration_local", "degeneration_openai", "degeneration_anthropic"]:
-            experiment = run_degeneration_experiment(config, models, prompts, exp_name)
+            experiment = run_degeneration_experiment(config, exp_config["models"], models_config, prompts, exp_name)
 
             if experiment:
                 # Print results summary

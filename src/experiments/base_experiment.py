@@ -2,12 +2,16 @@
 
 import json
 import pickle
+import gc
 from pathlib import Path
 from typing import Dict, List, Any, Optional
 import pandas as pd
 from datetime import datetime
 from tqdm import tqdm
 import traceback
+import torch
+
+from ..models import UnifiedModel
 
 
 class BaseExperiment:
@@ -41,12 +45,14 @@ class BaseExperiment:
         # Results storage
         self.results = {}
 
-    def run(self, models: Dict[str, Any]) -> Dict[str, Any]:
+    def run(self, model_names: List[str], models_config: Dict[str, Any]) -> Dict[str, Any]:
         """
         Run experiment for all models and methods.
+        Models are loaded individually to avoid memory issues.
 
         Args:
-            models: Dictionary of model_name -> model instance
+            model_names: List of model names to test
+            models_config: Model configurations from models.yaml
 
         Returns:
             Results dictionary
@@ -56,12 +62,29 @@ class BaseExperiment:
 
         print(f"\n{'='*60}")
         print(f"Running {self.name} Experiment")
-        print(f"Models: {list(models.keys())}")
+        print(f"Models: {model_names}")
         print(f"Methods: {self.config.get('methods', ['default'])}")
         print(f"Samples: {len(self.prompts)}")
         print(f"{'='*60}\n")
 
-        for model_name, model in models.items():
+        for model_name in model_names:
+            # Skip models that don't have configs
+            if model_name not in models_config:
+                print(f"⚠️  Model {model_name} not found in config, skipping")
+                continue
+
+            # Load model individually
+            print(f"\n[{model_name}]")
+            print(f"  Loading model...")
+
+            try:
+                model_config = models_config[model_name]
+                model = UnifiedModel.create(model_name, **model_config)
+                model_type = model_config.get("type", "unknown")
+                print(f"  ✓ Loaded {model_name}")
+            except Exception as e:
+                print(f"  ✗ Failed to load {model_name}: {e}")
+                continue
             print(f"\n[{model_name}]")
 
             if model_name not in self.results:
@@ -114,6 +137,16 @@ class BaseExperiment:
 
                 # Print summary
                 self.print_metrics_summary(model_name, method, metrics)
+
+            # Clean up GPU memory after this model
+            if model_type == "huggingface" and torch.cuda.is_available():
+                del model
+                gc.collect()
+                torch.cuda.empty_cache()
+                print(f"  🧹 GPU memory cleaned")
+            else:
+                del model
+                gc.collect()
 
         # Save final results
         self.save_final_results()
