@@ -71,44 +71,28 @@ class HuggingFaceModel(BaseModel):
         except Exception as e:
             raise RuntimeError(f"Failed to load HuggingFace model {self.model_id}: {e}")
 
-    @property
-    def supported_methods(self) -> List[str]:
-        """HuggingFace models support ALL decoding methods."""
-        return [
-            "greedy",
-            "beam", "beam_2", "beam_5", "beam_10", "beam_20",
-            "temperature",
-            "nucleus_0.9", "nucleus_0.95", "nucleus_0.99",
-            "top_k_10", "top_k_50", "top_k_100",
-            "contrastive"  # Advanced method
-        ]
-
-    @property
-    def supports_logprobs(self) -> bool:
-        """HuggingFace provides full logprobs access."""
-        return True
-
-    @property
-    def supports_full_logprobs(self) -> bool:
-        """HuggingFace provides complete vocabulary probabilities."""
-        return True
 
     def _generate_impl(
         self,
         prompt: str,
         method: str,
         max_length: int,
-        temperature: float,
-        top_p: float,
-        top_k: int,
-        num_beams: Optional[int],
         **kwargs
     ) -> str:
         """
-        Generate text using HuggingFace transformers.
+        Generate text using HuggingFace transformers with strict parameter enforcement.
 
-        Supports all decoding methods.
+        Uses capability-aware parameter isolation.
         """
+        # Extract parameters from kwargs
+        base_method = kwargs.get("base_method", method)
+        temperature = kwargs.get("temperature", 1.0)
+        top_p = kwargs.get("top_p", 0.95)
+        top_k = kwargs.get("top_k", 50)
+        num_beams = kwargs.get("num_beams", 1)
+        do_sample = kwargs.get("do_sample", True)
+        penalty_alpha = kwargs.get("penalty_alpha", 0.6)
+
         # Tokenize input
         inputs = self.tokenizer(prompt, return_tensors="pt").to(self.device)
         input_length = inputs["input_ids"].shape[1]
@@ -120,41 +104,43 @@ class HuggingFaceModel(BaseModel):
             "eos_token_id": self.tokenizer.eos_token_id,
         }
 
-        # Set method-specific parameters
-        if method == "greedy":
+        # Set method-specific parameters using strict parameter isolation
+        if base_method == "greedy":
             gen_kwargs["do_sample"] = False
             gen_kwargs["num_beams"] = 1
+            gen_kwargs["temperature"] = 0.0
 
-        elif method.startswith("beam"):
+        elif base_method == "beam":
             gen_kwargs["do_sample"] = False
-            gen_kwargs["num_beams"] = num_beams or 5
+            gen_kwargs["num_beams"] = num_beams
             gen_kwargs["early_stopping"] = True
+            gen_kwargs["temperature"] = temperature
 
-        elif method == "temperature":
+        elif base_method == "temperature":
             gen_kwargs["do_sample"] = True
             gen_kwargs["temperature"] = temperature
             gen_kwargs["top_p"] = 1.0
             gen_kwargs["top_k"] = 0
 
-        elif method.startswith("nucleus"):
+        elif base_method == "nucleus":
             gen_kwargs["do_sample"] = True
             gen_kwargs["temperature"] = temperature
             gen_kwargs["top_p"] = top_p
             gen_kwargs["top_k"] = 0
 
-        elif method.startswith("top_k"):
+        elif base_method == "top_k":
             gen_kwargs["do_sample"] = True
             gen_kwargs["temperature"] = temperature
             gen_kwargs["top_k"] = top_k
             gen_kwargs["top_p"] = 1.0
 
-        elif method == "contrastive":
+        elif base_method == "contrastive":
             # Contrastive search (requires transformers >= 4.24)
-            gen_kwargs["penalty_alpha"] = kwargs.get("penalty_alpha", 0.6)
-            gen_kwargs["top_k"] = kwargs.get("top_k", 5)
+            gen_kwargs["penalty_alpha"] = penalty_alpha
+            gen_kwargs["top_k"] = top_k
 
         else:
-            raise ValueError(f"Unknown method: {method}")
+            raise ValueError(f"Unknown method: {base_method}")
 
         # Generate
         with torch.no_grad():

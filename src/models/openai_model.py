@@ -36,71 +36,50 @@ class OpenAIModel(BaseModel):
         self.model_id = kwargs.get("model_id", model_name)
         self.cost_per_1k = kwargs.get("cost_per_1k", 0.002)
 
-    @property
-    def supported_methods(self) -> List[str]:
-        """OpenAI supports only sampling methods, no beam search."""
-        return [
-            "greedy",
-            "temperature",
-            "nucleus_0.9", "nucleus_0.95", "nucleus_0.99",
-            "top_k_10", "top_k_50", "top_k_100"
-        ]
-
-    @property
-    def supports_logprobs(self) -> bool:
-        """OpenAI provides limited logprobs (top-5 only)."""
-        return True
-
-    @property
-    def supports_full_logprobs(self) -> bool:
-        """OpenAI does NOT provide full vocabulary probabilities."""
-        return False
 
     def _generate_impl(
         self,
         prompt: str,
         method: str,
         max_length: int,
-        temperature: float,
-        top_p: float,
-        top_k: int,
-        num_beams: Optional[int],
         **kwargs
     ) -> str:
         """
-        Generate text using OpenAI API.
+        Generate text using OpenAI API with strict parameter enforcement.
 
-        Note: Beam search will raise an error as it's not supported.
+        NO SILENT FALLBACKS: Unsupported methods will raise errors.
         """
-        # Fail fast if beam search is requested
-        if method.startswith("beam"):
+        # Extract parameters from kwargs
+        base_method = kwargs.get("base_method", method)
+        temperature = kwargs.get("temperature", 1.0)
+        top_p = kwargs.get("top_p", 0.95)
+        top_k = kwargs.get("top_k")
+        num_beams = kwargs.get("num_beams")
+
+        # Fail fast for unsupported methods - NO SILENT FALLBACKS
+        if base_method == "beam" or num_beams and num_beams > 1:
             raise UnsupportedMethodError(
                 f"OpenAI API does not support beam search. "
-                f"Model: {self.model_name}, Method: {method}"
+                f"Model: {self.model_name}, Method: {method}, "
+                f"Base method: {base_method}, Beams: {num_beams}"
             )
 
-        # Configure parameters based on method
-        if method == "greedy":
-            api_temperature = 0.0
-            api_top_p = 1.0
-        elif method == "temperature":
-            api_temperature = temperature
-            api_top_p = 1.0
-        elif method.startswith("nucleus"):
-            api_temperature = temperature
-            api_top_p = top_p
-        elif method.startswith("top_k"):
-            # OpenAI doesn't have native top_k, simulate with temperature
-            print(
-                f"WARNING: OpenAI doesn't support top_k natively. "
-                f"Using temperature={temperature} as approximation."
+        if base_method == "top_k" or top_k is not None:
+            raise UnsupportedMethodError(
+                f"OpenAI API does not support top_k sampling natively. "
+                f"Model: {self.model_name}, Method: {method}, "
+                f"Base method: {base_method}, top_k: {top_k}. "
+                f"Use nucleus sampling instead."
             )
-            api_temperature = temperature
-            api_top_p = 1.0
-        else:
-            raise ValueError(f"Unknown method: {method}")
 
-        # Use Chat Completions API (modern, all models supported)
+        # Only supported methods reach here
+        if base_method not in ["greedy", "temperature", "nucleus"]:
+            raise UnsupportedMethodError(
+                f"OpenAI model {self.model_name} does not support method {base_method}. "
+                f"Supported: greedy, temperature, nucleus"
+            )
+
+        # Use Chat Completions API
         try:
             response = self.client.chat.completions.create(
                 model=self.model_id,
@@ -108,8 +87,8 @@ class OpenAIModel(BaseModel):
                     {"role": "user", "content": prompt}
                 ],
                 max_tokens=max_length,
-                temperature=api_temperature,
-                top_p=api_top_p
+                temperature=temperature,
+                top_p=top_p
             )
 
             # Track usage
@@ -128,31 +107,41 @@ class OpenAIModel(BaseModel):
         next_token: Optional[str] = None
     ) -> Dict[str, float]:
         """
-        Get token probabilities from OpenAI.
+        Get token probabilities from OpenAI using Chat Completions API.
 
-        Limited to top-5 tokens only!
+        Uses logprobs parameter (top-5 tokens).
         """
         try:
-            response = self.client.completions.create(
+            response = self.client.chat.completions.create(
                 model=self.model_id,
-                prompt=prompt,
+                messages=[
+                    {"role": "user", "content": prompt}
+                ],
                 max_tokens=1,
                 temperature=0.0,
-                logprobs=5  # Maximum allowed
+                logprobs=True,
+                top_logprobs=5  # Maximum allowed
             )
 
             if not response.choices[0].logprobs:
                 return {}
 
-            # Extract top-5 token probabilities
-            logprobs = response.choices[0].logprobs
-            tokens = logprobs.tokens[0] if logprobs.tokens else []
-            token_logprobs = logprobs.token_logprobs[0] if logprobs.token_logprobs else []
+            # Extract logprobs from chat completions response
+            choice_logprobs = response.choices[0].logprobs
+            if not choice_logprobs.content or len(choice_logprobs.content) == 0:
+                return {}
+
+            # Get the first token's logprobs
+            token_logprobs = choice_logprobs.content[0]
+            if not hasattr(token_logprobs, 'top_logprobs') or not token_logprobs.top_logprobs:
+                return {}
 
             # Convert to probability dict
             prob_dict = {}
-            for token, logprob in zip(tokens[:5], token_logprobs[:5]):
-                if logprob is not None:
+            for logprob_obj in token_logprobs.top_logprobs:
+                if hasattr(logprob_obj, 'token') and hasattr(logprob_obj, 'logprob'):
+                    token = logprob_obj.token
+                    logprob = logprob_obj.logprob
                     prob_dict[token] = np.exp(logprob)
 
             # Track usage

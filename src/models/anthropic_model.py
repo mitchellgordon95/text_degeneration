@@ -36,67 +36,48 @@ class AnthropicModel(BaseModel):
         self.model_id = kwargs.get("model_id", model_name)
         self.cost_per_1k = kwargs.get("cost_per_1k", 0.003)
 
-    @property
-    def supported_methods(self) -> List[str]:
-        """Anthropic supports only basic sampling methods."""
-        return [
-            "greedy",
-            "temperature",
-            "nucleus_0.9", "nucleus_0.95", "nucleus_0.99"
-            # Note: No top_k support in Anthropic API
-        ]
-
-    @property
-    def supports_logprobs(self) -> bool:
-        """Anthropic does NOT provide any logprobs."""
-        return False
-
-    @property
-    def supports_full_logprobs(self) -> bool:
-        """Anthropic does NOT provide any probabilities."""
-        return False
 
     def _generate_impl(
         self,
         prompt: str,
         method: str,
         max_length: int,
-        temperature: float,
-        top_p: float,
-        top_k: int,
-        num_beams: Optional[int],
         **kwargs
     ) -> str:
         """
-        Generate text using Anthropic API.
+        Generate text using Anthropic API with strict parameter enforcement.
 
-        Note: Many methods will raise errors as they're not supported.
+        NO SILENT FALLBACKS: Unsupported methods will raise errors.
         """
-        # Fail fast for unsupported methods
-        if method.startswith("beam"):
+        # Extract parameters from kwargs
+        base_method = kwargs.get("base_method", method)
+        temperature = kwargs.get("temperature", 1.0)
+        top_p = kwargs.get("top_p", 0.95)
+        top_k = kwargs.get("top_k")
+        num_beams = kwargs.get("num_beams")
+
+        # Fail fast for unsupported methods - NO SILENT FALLBACKS
+        if base_method == "beam" or num_beams and num_beams > 1:
             raise UnsupportedMethodError(
                 f"Anthropic API does not support beam search. "
-                f"Model: {self.model_name}, Method: {method}"
+                f"Model: {self.model_name}, Method: {method}, "
+                f"Base method: {base_method}, Beams: {num_beams}"
             )
 
-        if method.startswith("top_k"):
+        if base_method == "top_k" or top_k is not None:
             raise UnsupportedMethodError(
                 f"Anthropic API does not support top_k sampling. "
-                f"Model: {self.model_name}, Method: {method}"
+                f"Model: {self.model_name}, Method: {method}, "
+                f"Base method: {base_method}, top_k: {top_k}. "
+                f"Use nucleus sampling instead."
             )
 
-        # Configure parameters based on method
-        if method == "greedy":
-            temperature = 0.0
-            top_p = 1.0
-        elif method == "temperature":
-            temperature = temperature
-            top_p = 1.0
-        elif method.startswith("nucleus"):
-            temperature = temperature
-            top_p = top_p
-        else:
-            raise ValueError(f"Unknown method: {method}")
+        # Only supported methods reach here
+        if base_method not in ["greedy", "temperature", "nucleus"]:
+            raise UnsupportedMethodError(
+                f"Anthropic model {self.model_name} does not support method {base_method}. "
+                f"Supported: greedy, temperature, nucleus"
+            )
 
         # Make API call
         try:

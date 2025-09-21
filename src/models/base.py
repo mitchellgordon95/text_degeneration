@@ -4,17 +4,16 @@ from abc import ABC, abstractmethod
 from typing import List, Dict, Optional, Any, Tuple
 import numpy as np
 
-
-class UnsupportedMethodError(Exception):
-    """Raised when attempting to use an unsupported decoding method."""
-    pass
+# Import our capability system
+from ..utils.capabilities import CapabilityManager, UnsupportedMethodError, get_method_parameters
 
 
 class BaseModel(ABC):
     """
     Abstract base class for all models.
 
-    Enforces strict method compatibility - no silent fallbacks.
+    Enforces strict method compatibility using YAML-based capabilities.
+    No silent fallbacks allowed.
     """
 
     def __init__(self, model_name: str, **kwargs):
@@ -22,27 +21,25 @@ class BaseModel(ABC):
         self.total_tokens = 0
         self.total_cost = 0.0
 
+        # Initialize capability manager for this model
+        self._capability_manager = CapabilityManager()
+
     @property
-    @abstractmethod
     def supported_methods(self) -> List[str]:
         """
-        Return list of supported decoding methods.
-
-        This must be explicitly defined by each model class.
+        Return list of supported decoding methods from YAML config.
         """
-        pass
+        return self._capability_manager.get_supported_methods(self.model_name)
 
     @property
-    @abstractmethod
     def supports_logprobs(self) -> bool:
         """Whether this model can return log probabilities."""
-        pass
+        return self._capability_manager.supports_logprobs(self.model_name)
 
     @property
-    @abstractmethod
     def supports_full_logprobs(self) -> bool:
         """Whether this model can return probabilities for all vocabulary tokens."""
-        pass
+        return self._capability_manager.supports_full_logprobs(self.model_name)
 
     def validate_method(self, method: str) -> None:
         """
@@ -54,11 +51,7 @@ class BaseModel(ABC):
         Raises:
             UnsupportedMethodError: If method is not supported
         """
-        if not self.can_use_method(method):
-            raise UnsupportedMethodError(
-                f"Model {self.model_name} does not support method '{method}'. "
-                f"Supported methods: {', '.join(self.supported_methods)}"
-            )
+        self._capability_manager.validate_method(self.model_name, method)
 
     def can_use_method(self, method: str) -> bool:
         """
@@ -70,35 +63,23 @@ class BaseModel(ABC):
         Returns:
             True if method is supported, False otherwise
         """
-        # Handle parameterized methods (e.g., "beam_10" -> "beam")
-        base_method = method.split('_')[0] if '_' in method else method
-
-        # Check both full method name and base method name
-        return method in self.supported_methods or base_method in self.supported_methods
+        return self._capability_manager.supports_method(self.model_name, method)
 
     def generate(
         self,
         prompt: str,
         method: str = "greedy",
         max_length: int = 256,
-        temperature: float = 1.0,
-        top_p: float = 0.95,
-        top_k: int = 50,
-        num_beams: Optional[int] = None,
         **kwargs
     ) -> str:
         """
-        Generate text using specified decoding method.
+        Generate text using specified decoding method with strict parameter isolation.
 
         Args:
             prompt: Input prompt
             method: Decoding method (must be in supported_methods)
             max_length: Maximum tokens to generate
-            temperature: Sampling temperature
-            top_p: Nucleus sampling parameter
-            top_k: Top-k sampling parameter
-            num_beams: Beam search width (extracted from method if needed)
-            **kwargs: Additional method-specific parameters
+            **kwargs: Additional method-specific parameters (will be overridden by method defaults)
 
         Returns:
             Generated text
@@ -109,37 +90,18 @@ class BaseModel(ABC):
         # Strict validation - no silent fallbacks
         self.validate_method(method)
 
-        # Extract beam size from method name if applicable
-        if method.startswith("beam_") and num_beams is None:
-            try:
-                num_beams = int(method.split("_")[1])
-            except (IndexError, ValueError):
-                raise ValueError(f"Invalid beam search method format: {method}")
+        # Get canonical parameters for this method (enforces parameter isolation)
+        method_params = get_method_parameters(method)
 
-        # Extract nucleus/top_p value from method name if applicable
-        if method.startswith("nucleus_"):
-            try:
-                top_p = float(method.split("_")[1])
-            except (IndexError, ValueError):
-                raise ValueError(f"Invalid nucleus sampling method format: {method}")
+        # Override with any kwargs if provided, but prioritize method defaults
+        combined_params = {**kwargs, **method_params}
 
-        # Extract top_k value from method name if applicable
-        if method.startswith("top_k_"):
-            try:
-                top_k = int(method.split("_")[1])
-            except (IndexError, ValueError):
-                raise ValueError(f"Invalid top-k sampling method format: {method}")
-
-        # Delegate to implementation
+        # Delegate to implementation with strict parameters
         return self._generate_impl(
             prompt=prompt,
             method=method,
             max_length=max_length,
-            temperature=temperature,
-            top_p=top_p,
-            top_k=top_k,
-            num_beams=num_beams,
-            **kwargs
+            **combined_params
         )
 
     @abstractmethod
@@ -148,14 +110,16 @@ class BaseModel(ABC):
         prompt: str,
         method: str,
         max_length: int,
-        temperature: float,
-        top_p: float,
-        top_k: int,
-        num_beams: Optional[int],
         **kwargs
     ) -> str:
         """
         Actual implementation of text generation.
+
+        Args:
+            prompt: Input prompt
+            method: Base method name (e.g., "greedy", "beam", "nucleus")
+            max_length: Maximum tokens to generate
+            **kwargs: Method-specific parameters (temperature, top_p, top_k, num_beams, etc.)
 
         To be implemented by subclasses.
         """
