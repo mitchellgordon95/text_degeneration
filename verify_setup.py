@@ -53,6 +53,9 @@ class AcademicVerifier:
         self.models_config = {}
         self.experiments_config = {}
         self.errors = []
+        self.skip_models = []
+        self.quick_mode = False
+        self.only_models = None
 
     def check_dependencies(self):
         """Check that all required packages are installed."""
@@ -268,9 +271,25 @@ class AcademicVerifier:
             results = {"load_time": load_time, "memory_used_gb": memory_used, "methods": {}}
             test_prompt = "The weather today is"
 
-            print(f"  🎯 Testing {len(claimed_methods)} claimed methods...")
-
+            # Convert base method names to testable parameterized versions
+            test_methods = []
             for method in claimed_methods:
+                if method == "beam":
+                    # For beam, test a reasonable size
+                    test_methods.append("beam_5")
+                elif method == "nucleus":
+                    # For nucleus, test a common value
+                    test_methods.append("nucleus_0.95")
+                elif method == "top_k":
+                    # For top_k, test a common value
+                    test_methods.append("top_k_50")
+                else:
+                    # Use as-is for non-parameterized methods
+                    test_methods.append(method)
+
+            print(f"  🎯 Testing {len(test_methods)} claimed methods...")
+
+            for method in test_methods:
                 print(f"    Testing {method}...", end=" ")
 
                 try:
@@ -321,7 +340,9 @@ class AcademicVerifier:
 
             # Test unsupported methods (should fail)
             all_possible_methods = ["greedy", "beam_5", "beam_10", "nucleus_0.95", "top_k_50", "contrastive"]
-            unsupported_methods = [m for m in all_possible_methods if m not in claimed_methods]
+            # Use capability manager to properly check support (handles aliasing)
+            unsupported_methods = [m for m in all_possible_methods
+                                  if not self.capability_manager.supports_method(model_name, m)]
 
             if unsupported_methods:
                 print(f"  🚫 Testing {len(unsupported_methods)} unsupported methods (should fail)...")
@@ -422,25 +443,45 @@ class AcademicVerifier:
             # Test a representative subset of models
             models_to_test = []
 
-            # Always test these core models if available
-            core_models = ["gpt2", "gpt-4", "claude-3-5-sonnet-20241022"]
-            for model in core_models:
-                if model in self.models_config:
-                    models_to_test.append(model)
+            # Handle --only flag: test only specified models
+            if self.only_models:
+                models_to_test = [m for m in self.only_models if m in self.models_config]
+                if not models_to_test:
+                    raise VerificationError(f"None of the specified models exist: {self.only_models}")
 
-            # Add GPU-appropriate models
-            if self.gpu_info and self.gpu_info["available"]:
-                gpu_memory = self.gpu_info["memory_free_gb"]
+            # Handle --quick flag: only core models
+            elif self.quick_mode:
+                core_models = ["gpt2", "gpt-4", "claude-3-5-sonnet-20241022"]
+                for model in core_models:
+                    if model in self.models_config:
+                        models_to_test.append(model)
 
-                if gpu_memory > 10:
-                    models_to_test.extend(["gpt2-large", "qwen2.5-7b"])
-                if gpu_memory > 30:
-                    models_to_test.extend(["mistral-small-3-24b"])
-                if gpu_memory > 70:
-                    models_to_test.extend(["llama3-70b"])
+            # Default: comprehensive test based on available resources
+            else:
+                # Always test these core models if available
+                core_models = ["gpt2", "gpt-4", "claude-3-5-sonnet-20241022"]
+                for model in core_models:
+                    if model in self.models_config:
+                        models_to_test.append(model)
+
+                # Add GPU-appropriate models
+                if self.gpu_info and self.gpu_info["available"]:
+                    gpu_memory = self.gpu_info["memory_free_gb"]
+
+                    if gpu_memory > 10:
+                        models_to_test.extend(["gpt2-large", "qwen2.5-7b"])
+                    if gpu_memory > 30:
+                        models_to_test.extend(["mistral-small-3-24b"])
+                    if gpu_memory > 70:
+                        models_to_test.extend(["llama3-70b"])
 
             # Remove duplicates and filter to existing models
             models_to_test = list(set(m for m in models_to_test if m in self.models_config))
+
+            # Apply --skip filter
+            if self.skip_models:
+                models_to_test = [m for m in models_to_test if m not in self.skip_models]
+                print(f"Skipping models: {self.skip_models}")
 
             print(f"Testing {len(models_to_test)} representative models...")
 
@@ -491,7 +532,33 @@ class AcademicVerifier:
 
 def main():
     """Run academic-grade verification."""
+    import argparse
+
+    parser = argparse.ArgumentParser(description="Academic-grade capability verification for text degeneration experiments")
+    parser.add_argument(
+        "--skip",
+        nargs="+",
+        help="Skip specific models by ID (e.g., --skip llama3-70b mistral-small-3-24b)",
+        default=[]
+    )
+    parser.add_argument(
+        "--quick",
+        action="store_true",
+        help="Quick mode - test only core models (gpt2, gpt-4, claude)"
+    )
+    parser.add_argument(
+        "--only",
+        nargs="+",
+        help="Test only specific models (e.g., --only gpt2 gpt-4)",
+        default=None
+    )
+
+    args = parser.parse_args()
+
     verifier = AcademicVerifier()
+    verifier.skip_models = args.skip
+    verifier.quick_mode = args.quick
+    verifier.only_models = args.only
     return verifier.run_verification()
 
 

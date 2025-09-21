@@ -63,6 +63,14 @@ class CapabilityManager:
         # Extract base method name for parameterized methods
         if method.startswith("beam_"):
             base_method = "beam"
+            # Special validation for beam search - check if size is within limits
+            try:
+                beam_size = int(method.split("_")[1])
+                max_beam = self.get_max_beam_size(model_name)
+                if max_beam is not None and beam_size > max_beam:
+                    return False  # Beam size exceeds model's maximum
+            except (IndexError, ValueError):
+                return False  # Invalid beam method format
         elif method.startswith("nucleus_"):
             base_method = "nucleus"
         elif method.startswith("top_k_"):
@@ -172,14 +180,13 @@ def get_method_parameters(method: str) -> Dict[str, Any]:
             "do_sample": False
         }
 
-    elif method == "beam" or method.startswith("beam_"):
-        # Extract beam size (e.g., "beam_10" -> 10, "beam" -> 5)
-        beam_size = 5  # Default
-        if "_" in method:
-            try:
-                beam_size = int(method.split("_")[1])
-            except (IndexError, ValueError):
-                raise ValueError(f"Invalid beam search method format: {method}")
+    elif method.startswith("beam_"):
+        # Extract beam size (e.g., "beam_10" -> 10)
+        # No longer accept plain "beam" - require explicit size
+        try:
+            beam_size = int(method.split("_")[1])
+        except (IndexError, ValueError):
+            raise ValueError(f"Invalid beam search method format: {method}. Use explicit size like 'beam_5' or 'beam_10'")
 
         return {
             "base_method": "beam",
