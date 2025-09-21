@@ -35,8 +35,7 @@ class BaseExperiment:
         # Checkpoint file for resuming
         self.checkpoint_file = self.output_dir / f"{self.name}_checkpoint.pkl"
 
-        # Track costs
-        self.total_cost = 0.0
+        # Track tokens
         self.total_tokens = 0
 
         # Results storage
@@ -103,9 +102,7 @@ class BaseExperiment:
                     "timestamp": datetime.now().isoformat()
                 }
 
-                # Update costs
-                if hasattr(model, 'total_cost'):
-                    self.total_cost += model.total_cost
+                # Update tokens
                 if hasattr(model, 'total_tokens'):
                     self.total_tokens += model.total_tokens
 
@@ -123,7 +120,6 @@ class BaseExperiment:
 
         print(f"\n{'='*60}")
         print(f"Experiment Complete!")
-        print(f"Total cost: ${self.total_cost:.2f}")
         print(f"Total tokens: {self.total_tokens:,}")
         print(f"{'='*60}\n")
 
@@ -156,7 +152,6 @@ class BaseExperiment:
         """Save checkpoint for resuming."""
         checkpoint = {
             "results": self.results,
-            "total_cost": self.total_cost,
             "total_tokens": self.total_tokens,
             "timestamp": datetime.now().isoformat()
         }
@@ -169,7 +164,6 @@ class BaseExperiment:
             try:
                 with open(self.checkpoint_file, 'rb') as f:
                     checkpoint = pickle.load(f)
-                    self.total_cost = checkpoint.get("total_cost", 0)
                     self.total_tokens = checkpoint.get("total_tokens", 0)
                     print(f"Loaded checkpoint from {checkpoint.get('timestamp', 'unknown')}")
                     return checkpoint.get("results", {})

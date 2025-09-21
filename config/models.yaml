@@ -60,7 +60,6 @@ models:
   gpt-3.5-turbo-instruct:
     type: openai
     model_id: gpt-3.5-turbo-instruct
-    cost_per_1k: 0.002
     capabilities:
       supported_methods: ["greedy", "temperature", "nucleus"]
       supports_logprobs: true
@@ -73,7 +72,6 @@ models:
   gpt-4:
     type: openai
     model_id: gpt-4
-    cost_per_1k: 0.04
     capabilities:
       supported_methods: ["greedy", "temperature", "nucleus"]
       supports_logprobs: true
@@ -86,7 +84,6 @@ models:
   gpt-4-turbo:
     type: openai
     model_id: gpt-4-turbo-preview
-    cost_per_1k: 0.02
     capabilities:
       supported_methods: ["greedy", "temperature", "nucleus"]
       supports_logprobs: true
@@ -99,7 +96,6 @@ models:
   gpt-5:
     type: openai
     model_id: gpt-5
-    cost_per_1k: 0.00125  # $1.25/1M input, $10/1M output (averaging)
     capabilities:
       supported_methods: ["greedy", "temperature", "nucleus"]
       supports_logprobs: true
@@ -113,7 +109,6 @@ models:
   claude-3-5-sonnet-20241022:
     type: anthropic
     model_id: claude-3-5-sonnet-20241022
-    cost_per_1k: 0.003
     capabilities:
       supported_methods: ["greedy", "temperature", "nucleus"]
       supports_logprobs: false
@@ -126,7 +121,6 @@ models:
   claude-3-opus:
     type: anthropic
     model_id: claude-3-opus-20240229
-    cost_per_1k: 0.015
     capabilities:
       supported_methods: ["greedy", "temperature", "nucleus"]
       supports_logprobs: false
@@ -139,7 +133,6 @@ models:
   claude-3-haiku:
     type: anthropic
     model_id: claude-3-haiku-20240307
-    cost_per_1k: 0.00025
     capabilities:
       supported_methods: ["greedy", "temperature", "nucleus"]
       supports_logprobs: false
@@ -152,7 +145,6 @@ models:
   claude-4-opus:
     type: anthropic
     model_id: claude-opus-4-1-20250805
-    cost_per_1k: 0.015  # $15/1M input, $75/1M output (averaging)
     capabilities:
       supported_methods: ["greedy", "temperature", "nucleus"]
       supports_logprobs: false
@@ -291,9 +283,3 @@ models:
       max_beam_size: 50
       limitations: []
       notes: "Full capabilities - DeepSeek 67B chat model"
-
-# Cost tracking settings
-cost_tracking:
-  track_costs: true
-  warn_at_cost: 10.0  # Warn when total cost exceeds this
-  stop_at_cost: 50.0  # Stop experiments when total cost exceeds this

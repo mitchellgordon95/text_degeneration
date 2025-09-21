@@ -34,7 +34,6 @@ class OpenAIModel(BaseModel):
 
         # Model-specific settings
         self.model_id = kwargs.get("model_id", model_name)
-        self.cost_per_1k = kwargs.get("cost_per_1k", 0.002)
 
 
     def _generate_impl(
@@ -94,7 +93,6 @@ class OpenAIModel(BaseModel):
             # Track usage
             if hasattr(response, 'usage'):
                 self.total_tokens += response.usage.total_tokens
-                self.total_cost += (response.usage.total_tokens / 1000) * self.cost_per_1k
 
             return response.choices[0].message.content
 
@@ -147,7 +145,6 @@ class OpenAIModel(BaseModel):
             # Track usage
             if hasattr(response, 'usage'):
                 self.total_tokens += response.usage.total_tokens
-                self.total_cost += (response.usage.total_tokens / 1000) * self.cost_per_1k
 
             return prob_dict
 
@@ -204,7 +201,6 @@ class OpenAIModel(BaseModel):
                     # Track usage
                     if hasattr(response, 'usage'):
                         self.total_tokens += response.usage.total_tokens
-                        self.total_cost += (response.usage.total_tokens / 1000) * self.cost_per_1k
 
                 except Exception as e:
                     print(f"Error computing perplexity for context: {e}")

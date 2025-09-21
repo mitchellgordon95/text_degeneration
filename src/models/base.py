@@ -19,7 +19,6 @@ class BaseModel(ABC):
     def __init__(self, model_name: str, **kwargs):
         self.model_name = model_name
         self.total_tokens = 0
-        self.total_cost = 0.0
 
         # Initialize capability manager for this model
         self._capability_manager = CapabilityManager()

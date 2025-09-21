@@ -16,7 +16,7 @@ sys.path.insert(0, str(Path(__file__).parent))
 
 from src.models import UnifiedModel
 from src.experiments import DegenerationExperiment
-from src.utils import load_prompts, load_config, CostTracker
+from src.utils import load_prompts, load_config
 from src.utils.data_loader import load_prompt_set
 
 
@@ -144,12 +144,6 @@ def main():
         action="store_true",
         help="Print what would be run without executing"
     )
-    parser.add_argument(
-        "--cost-limit",
-        type=float,
-        default=50.0,
-        help="Maximum cost in dollars"
-    )
 
     args = parser.parse_args()
 
@@ -205,8 +199,6 @@ def main():
         print("❌ No models could be loaded")
         return 1
 
-    # Set up cost tracking
-    cost_tracker = CostTracker(warn_at=args.cost_limit * 0.5, stop_at=args.cost_limit)
 
     # Run experiment
     print(f"\n🚀 Running {exp_name} experiment...")
@@ -235,9 +227,8 @@ def main():
                         for method, stats in methods.items():
                             print(f"  {method:15} Our: {stats['our_rate']:.2f}% | Holtzman: {stats['holtzman_rate']:.2f}% | Diff: {stats['difference']:+.2f}%")
 
-                # Cost summary
-                print(f"\nTotal cost: ${experiment.total_cost:.2f}")
-                print(f"Total tokens: {experiment.total_tokens:,}")
+                # Token summary
+                print(f"\nTotal tokens: {experiment.total_tokens:,}")
 
         elif exp_name in ["perplexity_local", "perplexity_openai"]:
             print(f"🚧 {exp_name} experiment not yet implemented")

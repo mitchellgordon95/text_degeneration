@@ -34,7 +34,6 @@ class AnthropicModel(BaseModel):
 
         # Model-specific settings
         self.model_id = kwargs.get("model_id", model_name)
-        self.cost_per_1k = kwargs.get("cost_per_1k", 0.003)
 
 
     def _generate_impl(
@@ -102,7 +101,6 @@ class AnthropicModel(BaseModel):
             # Anthropic doesn't provide exact token counts in the same way
             approx_tokens = len(prompt.split()) + len(text.split())
             self.total_tokens += approx_tokens
-            self.total_cost += (approx_tokens / 1000) * self.cost_per_1k
 
             return text
 

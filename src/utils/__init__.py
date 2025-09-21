@@ -1,5 +1,4 @@
 from .data_loader import load_prompts, load_config
-from .cost_tracker import CostTracker
 from .capabilities import (
     CapabilityManager,
     UnsupportedMethodError,
@@ -11,7 +10,6 @@ from .capabilities import (
 __all__ = [
     "load_prompts",
     "load_config",
-    "CostTracker",
     "CapabilityManager",
     "UnsupportedMethodError",
     "get_method_parameters",
