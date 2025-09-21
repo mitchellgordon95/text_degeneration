@@ -36,61 +36,70 @@ class OpenAIModel(BaseModel):
         self.model_id = kwargs.get("model_id", model_name)
 
 
-    def _generate_impl(
-        self,
-        prompt: str,
-        method: str,
-        max_length: int,
-        **kwargs
-    ) -> str:
-        """
-        Generate text using OpenAI API with strict parameter enforcement.
-
-        NO SILENT FALLBACKS: Unsupported methods will raise errors.
-        """
-        # Extract parameters from kwargs
-        base_method = kwargs.get("base_method", method)
-        temperature = kwargs.get("temperature", 1.0)
-        top_p = kwargs.get("top_p", 0.95)
-        top_k = kwargs.get("top_k")
-        num_beams = kwargs.get("num_beams")
-
-        # Fail fast for unsupported methods - NO SILENT FALLBACKS
-        if base_method == "beam" or num_beams and num_beams > 1:
-            raise UnsupportedMethodError(
-                f"OpenAI API does not support beam search. "
-                f"Model: {self.model_name}, Method: {method}, "
-                f"Base method: {base_method}, Beams: {num_beams}"
-            )
-
-        if base_method == "top_k" or top_k is not None:
-            raise UnsupportedMethodError(
-                f"OpenAI API does not support top_k sampling natively. "
-                f"Model: {self.model_name}, Method: {method}, "
-                f"Base method: {base_method}, top_k: {top_k}. "
-                f"Use nucleus sampling instead."
-            )
-
-        # Only supported methods reach here
-        if base_method not in ["greedy", "temperature", "nucleus"]:
-            raise UnsupportedMethodError(
-                f"OpenAI model {self.model_name} does not support method {base_method}. "
-                f"Supported: greedy, temperature, nucleus"
-            )
-
-        # Use Chat Completions API
+    def generate_greedy(self, prompt: str, max_length: int = 256) -> str:
+        """Generate text using greedy decoding (temperature=0)."""
         try:
             response = self.client.chat.completions.create(
                 model=self.model_id,
-                messages=[
-                    {"role": "user", "content": prompt}
-                ],
+                messages=[{"role": "user", "content": prompt}],
                 max_tokens=max_length,
-                temperature=temperature,
+                temperature=0.0,
+                top_p=1.0
+            )
+
+            if hasattr(response, 'usage'):
+                self.total_tokens += response.usage.total_tokens
+
+            return response.choices[0].message.content
+
+        except Exception as e:
+            raise RuntimeError(f"OpenAI API error: {e}")
+
+    def generate_beam(self, prompt: str, beam_size: int, max_length: int = 256) -> str:
+        """Generate text using beam search decoding (not supported by OpenAI)."""
+        raise UnsupportedMethodError(
+            f"OpenAI API does not support beam search. "
+            f"Model: {self.model_name}, requested beam_size: {beam_size}"
+        )
+
+    def generate_nucleus(self, prompt: str, top_p: float, max_length: int = 256) -> str:
+        """Generate text using nucleus (top-p) sampling."""
+        try:
+            response = self.client.chat.completions.create(
+                model=self.model_id,
+                messages=[{"role": "user", "content": prompt}],
+                max_tokens=max_length,
+                temperature=1.0,
                 top_p=top_p
             )
 
-            # Track usage
+            if hasattr(response, 'usage'):
+                self.total_tokens += response.usage.total_tokens
+
+            return response.choices[0].message.content
+
+        except Exception as e:
+            raise RuntimeError(f"OpenAI API error: {e}")
+
+    def generate_top_k(self, prompt: str, top_k: int, max_length: int = 256) -> str:
+        """Generate text using top-k sampling (not supported by OpenAI)."""
+        raise UnsupportedMethodError(
+            f"OpenAI API does not support top_k sampling natively. "
+            f"Model: {self.model_name}, requested top_k: {top_k}. "
+            f"Use nucleus sampling instead."
+        )
+
+    def generate_temperature(self, prompt: str, temperature: float, max_length: int = 256) -> str:
+        """Generate text using temperature sampling."""
+        try:
+            response = self.client.chat.completions.create(
+                model=self.model_id,
+                messages=[{"role": "user", "content": prompt}],
+                max_tokens=max_length,
+                temperature=temperature,
+                top_p=1.0
+            )
+
             if hasattr(response, 'usage'):
                 self.total_tokens += response.usage.total_tokens
 

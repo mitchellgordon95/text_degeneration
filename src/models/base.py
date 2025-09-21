@@ -5,7 +5,7 @@ from typing import List, Dict, Optional, Any, Tuple
 import numpy as np
 
 # Import our capability system
-from ..utils.capabilities import CapabilityManager, UnsupportedMethodError, get_method_parameters
+from ..utils.capabilities import CapabilityManager, UnsupportedMethodError
 
 
 class BaseModel(ABC):
@@ -64,63 +64,80 @@ class BaseModel(ABC):
         """
         return self._capability_manager.supports_method(self.model_name, method)
 
-    def generate(
-        self,
-        prompt: str,
-        method: str = "greedy",
-        max_length: int = 256,
-        **kwargs
-    ) -> str:
+    @abstractmethod
+    def generate_greedy(self, prompt: str, max_length: int = 256) -> str:
         """
-        Generate text using specified decoding method with strict parameter isolation.
+        Generate text using greedy decoding (deterministic).
 
         Args:
             prompt: Input prompt
-            method: Decoding method (must be in supported_methods)
             max_length: Maximum tokens to generate
-            **kwargs: Additional method-specific parameters (will be overridden by method defaults)
+
+        Returns:
+            Generated text
+        """
+        pass
+
+    @abstractmethod
+    def generate_beam(self, prompt: str, beam_size: int, max_length: int = 256) -> str:
+        """
+        Generate text using beam search decoding.
+
+        Args:
+            prompt: Input prompt
+            beam_size: Number of beams for beam search
+            max_length: Maximum tokens to generate
 
         Returns:
             Generated text
 
         Raises:
-            UnsupportedMethodError: If method is not supported
+            UnsupportedMethodError: If model doesn't support beam search
         """
-        # Strict validation - no silent fallbacks
-        self.validate_method(method)
-
-        # Get canonical parameters for this method (enforces parameter isolation)
-        method_params = get_method_parameters(method)
-
-        # Override with any kwargs if provided, but prioritize method defaults
-        combined_params = {**kwargs, **method_params}
-
-        # Delegate to implementation with strict parameters
-        return self._generate_impl(
-            prompt=prompt,
-            method=method,
-            max_length=max_length,
-            **combined_params
-        )
+        pass
 
     @abstractmethod
-    def _generate_impl(
-        self,
-        prompt: str,
-        method: str,
-        max_length: int,
-        **kwargs
-    ) -> str:
+    def generate_nucleus(self, prompt: str, top_p: float, max_length: int = 256) -> str:
         """
-        Actual implementation of text generation.
+        Generate text using nucleus (top-p) sampling.
 
         Args:
             prompt: Input prompt
-            method: Base method name (e.g., "greedy", "beam", "nucleus")
+            top_p: Cumulative probability threshold for nucleus sampling
             max_length: Maximum tokens to generate
-            **kwargs: Method-specific parameters (temperature, top_p, top_k, num_beams, etc.)
 
-        To be implemented by subclasses.
+        Returns:
+            Generated text
+        """
+        pass
+
+    @abstractmethod
+    def generate_top_k(self, prompt: str, top_k: int, max_length: int = 256) -> str:
+        """
+        Generate text using top-k sampling.
+
+        Args:
+            prompt: Input prompt
+            top_k: Number of top tokens to consider
+            max_length: Maximum tokens to generate
+
+        Returns:
+            Generated text
+        """
+        pass
+
+    @abstractmethod
+    def generate_temperature(self, prompt: str, temperature: float, max_length: int = 256) -> str:
+        """
+        Generate text using temperature sampling.
+
+        Args:
+            prompt: Input prompt
+            temperature: Temperature for sampling (higher = more random)
+            max_length: Maximum tokens to generate
+
+        Returns:
+            Generated text
         """
         pass
 

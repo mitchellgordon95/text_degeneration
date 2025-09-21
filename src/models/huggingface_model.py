@@ -4,7 +4,11 @@ import torch
 from typing import List, Dict, Optional, Any, Tuple
 import numpy as np
 from transformers import AutoModelForCausalLM, AutoTokenizer
+import transformers
 import warnings
+
+# Set transformers verbosity to info to reduce noise
+transformers.logging.set_verbosity_info()
 
 from .base import BaseModel, UnsupportedMethodError
 
@@ -72,87 +76,133 @@ class HuggingFaceModel(BaseModel):
             raise RuntimeError(f"Failed to load HuggingFace model {self.model_id}: {e}")
 
 
-    def _generate_impl(
-        self,
-        prompt: str,
-        method: str,
-        max_length: int,
-        **kwargs
-    ) -> str:
-        """
-        Generate text using HuggingFace transformers with strict parameter enforcement.
-
-        Uses capability-aware parameter isolation.
-        """
-        # Extract parameters from kwargs
-        base_method = kwargs.get("base_method", method)
-        temperature = kwargs.get("temperature", 1.0)
-        top_p = kwargs.get("top_p", 0.95)
-        top_k = kwargs.get("top_k", 50)
-        num_beams = kwargs.get("num_beams", 1)
-        do_sample = kwargs.get("do_sample", True)
-        penalty_alpha = kwargs.get("penalty_alpha", 0.6)
-
-        # Tokenize input
+    def generate_greedy(self, prompt: str, max_length: int = 256) -> str:
+        """Generate text using greedy decoding (deterministic)."""
         inputs = self.tokenizer(prompt, return_tensors="pt").to(self.device)
         input_length = inputs["input_ids"].shape[1]
 
-        # Configure generation parameters
         gen_kwargs = {
             "max_new_tokens": max_length,
             "pad_token_id": self.tokenizer.pad_token_id,
             "eos_token_id": self.tokenizer.eos_token_id,
+            "do_sample": False,
+            "num_beams": 1,
+            "temperature": None,
+            "top_p": None,
+            "top_k": None,
+            "repetition_penalty": None,
         }
 
-        # Set method-specific parameters using strict parameter isolation
-        if base_method == "greedy":
-            gen_kwargs["do_sample"] = False
-            gen_kwargs["num_beams"] = 1
-            gen_kwargs["temperature"] = 0.0
-
-        elif base_method == "beam":
-            gen_kwargs["do_sample"] = False
-            gen_kwargs["num_beams"] = num_beams
-            gen_kwargs["early_stopping"] = True
-            gen_kwargs["temperature"] = temperature
-
-        elif base_method == "temperature":
-            gen_kwargs["do_sample"] = True
-            gen_kwargs["temperature"] = temperature
-            gen_kwargs["top_p"] = 1.0
-            gen_kwargs["top_k"] = 0
-
-        elif base_method == "nucleus":
-            gen_kwargs["do_sample"] = True
-            gen_kwargs["temperature"] = temperature
-            gen_kwargs["top_p"] = top_p
-            gen_kwargs["top_k"] = 0
-
-        elif base_method == "top_k":
-            gen_kwargs["do_sample"] = True
-            gen_kwargs["temperature"] = temperature
-            gen_kwargs["top_k"] = top_k
-            gen_kwargs["top_p"] = 1.0
-
-        elif base_method == "contrastive":
-            # Contrastive search (requires transformers >= 4.24)
-            gen_kwargs["penalty_alpha"] = penalty_alpha
-            gen_kwargs["top_k"] = top_k
-
-        else:
-            raise ValueError(f"Unknown method: {base_method}")
-
-        # Generate
         with torch.no_grad():
             outputs = self.model.generate(**inputs, **gen_kwargs)
 
-        # Decode and return only the new tokens
         generated = outputs[0][input_length:]
         text = self.tokenizer.decode(generated, skip_special_tokens=True)
-
-        # Track token usage
         self.total_tokens += len(generated)
+        return text
 
+    def generate_beam(self, prompt: str, beam_size: int, max_length: int = 256) -> str:
+        """Generate text using beam search decoding."""
+        if not self.can_use_method("beam_" + str(beam_size)):
+            raise UnsupportedMethodError(f"Model {self.model_name} does not support beam search")
+
+        inputs = self.tokenizer(prompt, return_tensors="pt").to(self.device)
+        input_length = inputs["input_ids"].shape[1]
+
+        gen_kwargs = {
+            "max_new_tokens": max_length,
+            "pad_token_id": self.tokenizer.pad_token_id,
+            "eos_token_id": self.tokenizer.eos_token_id,
+            "do_sample": False,
+            "num_beams": beam_size,
+            "early_stopping": True,
+            "temperature": None,
+            "top_p": None,
+            "top_k": None,
+            "repetition_penalty": None,
+        }
+
+        with torch.no_grad():
+            outputs = self.model.generate(**inputs, **gen_kwargs)
+
+        generated = outputs[0][input_length:]
+        text = self.tokenizer.decode(generated, skip_special_tokens=True)
+        self.total_tokens += len(generated)
+        return text
+
+    def generate_nucleus(self, prompt: str, top_p: float, max_length: int = 256) -> str:
+        """Generate text using nucleus (top-p) sampling."""
+        inputs = self.tokenizer(prompt, return_tensors="pt").to(self.device)
+        input_length = inputs["input_ids"].shape[1]
+
+        gen_kwargs = {
+            "max_new_tokens": max_length,
+            "pad_token_id": self.tokenizer.pad_token_id,
+            "eos_token_id": self.tokenizer.eos_token_id,
+            "do_sample": True,
+            "temperature": 1.0,
+            "top_p": top_p,
+            "top_k": 0,
+            "num_beams": 1,
+            "repetition_penalty": 1.0,
+        }
+
+        with torch.no_grad():
+            outputs = self.model.generate(**inputs, **gen_kwargs)
+
+        generated = outputs[0][input_length:]
+        text = self.tokenizer.decode(generated, skip_special_tokens=True)
+        self.total_tokens += len(generated)
+        return text
+
+    def generate_top_k(self, prompt: str, top_k: int, max_length: int = 256) -> str:
+        """Generate text using top-k sampling."""
+        inputs = self.tokenizer(prompt, return_tensors="pt").to(self.device)
+        input_length = inputs["input_ids"].shape[1]
+
+        gen_kwargs = {
+            "max_new_tokens": max_length,
+            "pad_token_id": self.tokenizer.pad_token_id,
+            "eos_token_id": self.tokenizer.eos_token_id,
+            "do_sample": True,
+            "temperature": 1.0,
+            "top_k": top_k,
+            "top_p": 1.0,
+            "num_beams": 1,
+            "repetition_penalty": 1.0,
+        }
+
+        with torch.no_grad():
+            outputs = self.model.generate(**inputs, **gen_kwargs)
+
+        generated = outputs[0][input_length:]
+        text = self.tokenizer.decode(generated, skip_special_tokens=True)
+        self.total_tokens += len(generated)
+        return text
+
+    def generate_temperature(self, prompt: str, temperature: float, max_length: int = 256) -> str:
+        """Generate text using temperature sampling."""
+        inputs = self.tokenizer(prompt, return_tensors="pt").to(self.device)
+        input_length = inputs["input_ids"].shape[1]
+
+        gen_kwargs = {
+            "max_new_tokens": max_length,
+            "pad_token_id": self.tokenizer.pad_token_id,
+            "eos_token_id": self.tokenizer.eos_token_id,
+            "do_sample": True,
+            "temperature": temperature,
+            "top_p": 1.0,
+            "top_k": 0,
+            "num_beams": 1,
+            "repetition_penalty": 1.0,
+        }
+
+        with torch.no_grad():
+            outputs = self.model.generate(**inputs, **gen_kwargs)
+
+        generated = outputs[0][input_length:]
+        text = self.tokenizer.decode(generated, skip_special_tokens=True)
+        self.total_tokens += len(generated)
         return text
 
     def _get_token_probabilities_impl(

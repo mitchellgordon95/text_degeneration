@@ -37,19 +37,33 @@ class DegenerationExperiment(BaseExperiment):
         prompts_to_use = self.prompts[:num_samples]
 
         for prompt in tqdm(prompts_to_use, desc=f"    Generating", leave=False):
-            # Parse method to extract parameters
-            params = self._parse_method(method)
-
-            # Generate text - let errors propagate
-            output = model.generate(
-                prompt=prompt,
-                method=params["base_method"],
-                max_length=self.max_length,
-                **params
-            )
+            # Generate text using method-specific interface
+            output = self._call_method(model, method, prompt, self.max_length)
             outputs.append(output)
 
         return outputs
+
+    def _call_method(self, model, method: str, prompt: str, max_length: int) -> str:
+        """Call the appropriate method-specific generation function."""
+        if method == "greedy":
+            return model.generate_greedy(prompt, max_length)
+        elif method.startswith("beam_"):
+            beam_size = int(method.split("_")[1])
+            return model.generate_beam(prompt, beam_size, max_length)
+        elif method.startswith("nucleus_"):
+            top_p = float(method.split("_")[1])
+            return model.generate_nucleus(prompt, top_p, max_length)
+        elif method.startswith("top_k_"):
+            top_k = int(method.split("_")[2])  # top_k_50 -> get the "50" part
+            return model.generate_top_k(prompt, top_k, max_length)
+        elif method == "temperature" or method.startswith("temperature_"):
+            if "_" in method:
+                temperature = float(method.split("_")[1])
+            else:
+                temperature = 1.0  # Default temperature
+            return model.generate_temperature(prompt, temperature, max_length)
+        else:
+            raise ValueError(f"Unknown method: {method}")
 
     def compute_metrics(self, outputs: List[str], model=None, method: str = None) -> Dict[str, float]:
         """Compute degeneration metrics."""
@@ -110,39 +124,6 @@ class DegenerationExperiment(BaseExperiment):
             "num_outputs": len(valid_outputs)
         }
 
-    def _parse_method(self, method: str) -> Dict[str, Any]:
-        """Parse method string to extract parameters."""
-        params = {
-            "base_method": method,
-            "temperature": 1.0,
-            "top_p": 0.95,
-            "top_k": 50,
-            "num_beams": 5
-        }
-
-        # Handle special cases
-        if method == "greedy":
-            params["base_method"] = "greedy"
-        elif method.startswith("beam"):
-            # Extract beam size if specified (e.g., "beam_10")
-            if "_" in method:
-                beam_size = int(method.split("_")[1])
-                params["num_beams"] = beam_size
-            params["base_method"] = "beam"
-        elif method == "nucleus" or method.startswith("nucleus"):
-            params["base_method"] = "nucleus"
-            # Extract p value if specified (e.g., "nucleus_0.9")
-            if "_" in method:
-                p_value = float(method.split("_")[1])
-                params["top_p"] = p_value
-        elif method.startswith("top_k"):
-            params["base_method"] = "top_k"
-            # Extract k value if specified
-            if "_" in method:
-                k_value = int(method.split("_")[1])
-                params["top_k"] = k_value
-
-        return params
 
     def analyze_results(self):
         """Create analysis DataFrame comparing methods."""
