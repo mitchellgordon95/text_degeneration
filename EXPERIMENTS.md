@@ -18,8 +18,8 @@ Modern LLMs (GPT-4, Claude-3.5, Llama-3) have fundamentally different probabilit
 
 ### Models to Test
 - **Baseline**: GPT-2-large (exact model from paper)
-- **Modern**: GPT-4, Claude-3.5, Llama-3-70B
-- **Intermediate**: GPT-3.5-turbo (pre-heavy-RLHF)
+- **Modern**: GPT-4, GPT-5, Claude-3.5, Claude-4, Llama-3-70B, Qwen2.5-72B, Mixtral-8x7B
+- **Additional**: Mistral-7B, Mistral-Small-3-24B, Qwen2.5-7B
 
 ### Decoding Methods
 - **Greedy**: Always pick highest probability token

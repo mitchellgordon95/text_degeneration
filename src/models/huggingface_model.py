@@ -7,8 +7,6 @@ from transformers import AutoModelForCausalLM, AutoTokenizer
 import transformers
 import warnings
 
-# Set transformers verbosity to info to reduce noise
-transformers.logging.set_verbosity_info()
 
 from .base import BaseModel, UnsupportedMethodError
 
