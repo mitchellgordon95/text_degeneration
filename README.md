@@ -6,6 +6,8 @@ This repository contains experiments testing whether findings from "The Curious 
 
 **Do modern LLMs (GPT-4, Claude-3.5, Llama-3) trained with RLHF still exhibit the text degeneration problems identified in 2019?**
 
+📊 **[See baseline results from the original paper](BASELINE_RESULTS.md)** - We aim to reproduce these metrics for modern models.
+
 ## Quick Start
 
 ```bash

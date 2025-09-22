@@ -1,32 +1,27 @@
-"""Degeneration experiment - testing repetition rates across models and methods."""
+"""Simple experiment for testing text generation with core metrics."""
 
 from typing import List, Dict, Any
 import numpy as np
-import pandas as pd
 from tqdm import tqdm
 
 from .base_experiment import BaseExperiment
-from ..metrics import (
+from ..metrics.core import (
     measure_repetition_rate,
-    measure_ngram_repetition,
     compute_self_bleu,
-    distinct_n_grams,
-    vocabulary_diversity
+    compute_perplexity,
+    compute_zipf_coefficient
 )
 
 
 class DegenerationExperiment(BaseExperiment):
     """
-    Test for text degeneration (repetition) across different decoding methods.
-    Replicates the analysis from Holtzman et al. 2019.
+    Test text generation quality across different decoding methods.
+    Measures repetition, diversity, perplexity, and Zipf coefficient.
     """
 
     def __init__(self, config: Dict[str, Any], prompts: List[str], output_dir: str = "outputs"):
         super().__init__("degeneration", config, prompts, output_dir)
-
-        # Experiment-specific config
         self.max_length = config.get("max_length", 256)
-        self.n_gram_size = config.get("n_gram_size", 4)  # Default to 4-grams as in paper
 
     def generate_outputs(self, model, method: str) -> List[str]:
         """Generate outputs with specified method."""
@@ -66,67 +61,42 @@ class DegenerationExperiment(BaseExperiment):
             raise ValueError(f"Unknown method: {method}")
 
     def compute_metrics(self, outputs: List[str], model=None, method: str = None) -> Dict[str, float]:
-        """Compute degeneration metrics."""
+        """Compute core metrics: repetition, self-BLEU, perplexity, and Zipf coefficient."""
         # Filter out empty outputs
         valid_outputs = [o for o in outputs if o.strip()]
 
         if not valid_outputs:
             return {
                 "repetition_rate": 0.0,
-                "texts_with_repetition": 0.0,
                 "self_bleu": 0.0,
-                "distinct_1": 0.0,
-                "distinct_2": 0.0,
-                "distinct_3": 0.0,
-                "vocabulary_size": 0,
-                "avg_length": 0.0
+                "perplexity": float('inf'),
+                "zipf_coefficient": 0.0,
+                "num_outputs": 0
             }
 
-        # Primary metric from Holtzman et al.
-        repetition_rate = measure_repetition_rate(valid_outputs, n=self.n_gram_size)
-
-        # Detailed repetition analysis
-        rep_details = measure_ngram_repetition(valid_outputs, n=self.n_gram_size)
-
-        # Diversity metrics
+        # Core metrics
+        repetition_rate = measure_repetition_rate(valid_outputs, n=4)
         self_bleu = compute_self_bleu(valid_outputs, n=4)
-        distinct_1 = distinct_n_grams(valid_outputs, n=1)
-        distinct_2 = distinct_n_grams(valid_outputs, n=2)
-        distinct_3 = distinct_n_grams(valid_outputs, n=3)
+        zipf_coef = compute_zipf_coefficient(valid_outputs)
 
-        # Vocabulary diversity
-        vocab_stats = vocabulary_diversity(valid_outputs)
-
-        # Average length
-        lengths = [len(o.split()) for o in valid_outputs]
-        avg_length = np.mean(lengths) if lengths else 0
+        # Perplexity (if model supports it)
+        perplexity = float('inf')
+        if model and hasattr(model, 'compute_perplexity'):
+            try:
+                perplexity = compute_perplexity(model, valid_outputs)
+            except:
+                pass  # Some models may not support perplexity
 
         return {
-            # Primary metrics (matching Holtzman)
             "repetition_rate": repetition_rate,
             "self_bleu": self_bleu if self_bleu >= 0 else None,
-
-            # Additional repetition details
-            "texts_with_repetition": rep_details["texts_with_repetition"],
-            "max_repetition_in_text": rep_details["max_repetition_in_text"],
-
-            # Diversity metrics
-            "distinct_1": distinct_1,
-            "distinct_2": distinct_2,
-            "distinct_3": distinct_3,
-
-            # Vocabulary metrics
-            "type_token_ratio": vocab_stats["type_token_ratio"],
-            "vocabulary_size": vocab_stats["vocabulary_size"],
-
-            # Basic stats
-            "avg_length": avg_length,
+            "perplexity": perplexity,
+            "zipf_coefficient": zipf_coef,
             "num_outputs": len(valid_outputs)
         }
 
-
     def analyze_results(self):
-        """Create analysis DataFrame comparing methods."""
+        """Create simple analysis summary."""
         import pandas as pd
 
         data = []
@@ -138,8 +108,8 @@ class DegenerationExperiment(BaseExperiment):
                     "method": method,
                     "repetition_rate": metrics.get("repetition_rate", 0),
                     "self_bleu": metrics.get("self_bleu", 0),
-                    "distinct_2": metrics.get("distinct_2", 0),
-                    "vocabulary_size": metrics.get("vocabulary_size", 0)
+                    "perplexity": metrics.get("perplexity", float('inf')),
+                    "zipf_coefficient": metrics.get("zipf_coefficient", 0)
                 })
 
         df = pd.DataFrame(data)
@@ -148,39 +118,3 @@ class DegenerationExperiment(BaseExperiment):
         df = df.sort_values(["model", "repetition_rate"])
 
         return df
-
-    def compare_to_holtzman(self) -> Dict[str, Any]:
-        """Compare results to Holtzman et al. 2019 findings."""
-        holtzman_results = {
-            "gpt2-large": {
-                "greedy": {"repetition_rate": 20.0},  # Approximate
-                "beam_10": {"repetition_rate": 28.94},
-                "nucleus_0.95": {"repetition_rate": 0.36}
-            }
-        }
-
-        comparison = {}
-        for model_name, model_results in self.results.items():
-            if "gpt2" in model_name.lower():
-                comparison[model_name] = {}
-                for method, method_results in model_results.items():
-                    our_rate = method_results["metrics"]["repetition_rate"]
-
-                    # Find matching Holtzman result
-                    holtzman_key = None
-                    if method == "greedy":
-                        holtzman_key = "greedy"
-                    elif "beam" in method and "10" in method:
-                        holtzman_key = "beam_10"
-                    elif "nucleus" in method and "0.95" in method:
-                        holtzman_key = "nucleus_0.95"
-
-                    if holtzman_key and holtzman_key in holtzman_results.get("gpt2-large", {}):
-                        holtzman_rate = holtzman_results["gpt2-large"][holtzman_key]["repetition_rate"]
-                        comparison[model_name][method] = {
-                            "our_rate": our_rate,
-                            "holtzman_rate": holtzman_rate,
-                            "difference": our_rate - holtzman_rate
-                        }
-
-        return comparison

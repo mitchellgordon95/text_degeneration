@@ -31,6 +31,43 @@
 
 ---
 
+## Evaluation Metrics Papers
+
+### 3. NoveltyBench: Evaluating Creativity and Diversity in Language Models (2024)
+**Link**: https://www.researchgate.net/publication/390571066_NoveltyBench_Evaluating_Creativity_and_Diversity_in_Language_Models
+**Key Contributions**:
+- Framework for evaluating creativity and diversity in LLMs
+- Novel metrics for measuring semantic novelty
+- Benchmark dataset for creativity evaluation
+**Our Relevance**: Provides additional diversity metrics beyond self-BLEU
+
+### 4. MAUVE: Measuring the Gap Between Neural Text and Human Text (2021/2023)
+**Authors**: Krishna Pillutla, Swabha Swayamdipta, Rowan Zellers, John Thickstun, Sean Welleck, Yejin Choi, Zaid Harchaoui
+**Links**:
+- https://arxiv.org/pdf/2102.01454
+- https://www.jmlr.org/papers/volume24/23-0023/23-0023.pdf
+**Key Contributions**:
+- Information-theoretic measure comparing text distributions
+- Captures both Type I and Type II errors in generation
+- More nuanced than perplexity or n-gram overlap
+**Our Relevance**: Advanced metric for distribution comparison, could replace/supplement perplexity gap
+
+### 5. LLM Evaluation Metrics: A Comprehensive Guide
+**Link**: https://wandb.ai/onlineinference/genai-research/reports/LLM-evaluation-metrics-A-comprehensive-guide-for-large-language-models--VmlldzoxMjU5ODA4NA
+**Key Contributions**:
+- Comprehensive overview of evaluation metrics
+- Practical guidance on metric selection
+- Implementation considerations
+**Our Relevance**: Reference for additional metrics to implement
+
+### 6. A Survey on Evaluation of Large Language Models
+**Link**: https://arxiv.org/pdf/1802.01886
+**Key Contributions**:
+- Systematic review of LLM evaluation approaches
+- Categorization of evaluation metrics
+- Discussion of evaluation challenges
+**Our Relevance**: Framework for thinking about evaluation comprehensively
+
 ## Related Papers to Consider
 
 ### Contrastive Decoding Papers

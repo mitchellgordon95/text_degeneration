@@ -1,0 +1,18 @@
+{
+  "model": "gpt2-large",
+  "method": "greedy",
+  "metrics": {
+    "repetition_rate": 63.57071713147411,
+    "self_bleu": 0.06550542350065276,
+    "texts_with_repetition": 100.0,
+    "max_repetition_in_text": 37,
+    "distinct_1": 0.14033366045142295,
+    "distinct_2": 0.273422090729783,
+    "distinct_3": 0.3315163528245788,
+    "type_token_ratio": 0.13812561334641807,
+    "vocabulary_size": 563,
+    "avg_length": 203.8,
+    "num_outputs": 20
+  },
+  "timestamp": "2025-09-17T14:05:59.482957"
+}

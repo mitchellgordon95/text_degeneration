@@ -1,33 +1,28 @@
-from .repetition import (
+"""
+Metrics for evaluating text generation quality.
+
+Organized into:
+- core: Metrics from Holtzman et al. 2019 paper
+- extended: Additional metrics beyond the original paper
+"""
+
+# Import core metrics from Holtzman et al. 2019
+from .core import (
     measure_repetition_rate,
-    measure_ngram_repetition,
-    count_repeated_ngrams
-)
-from .diversity import (
-    compute_self_bleu,
-    distinct_n_grams,
-    compute_entropy,
-    vocabulary_diversity
-)
-from .perplexity import (
     compute_perplexity,
-    compute_perplexity_gap
-)
-from .coherence import (
-    measure_coherence,
-    measure_semantic_similarity
+    compute_perplexity_gap,
+    compute_self_bleu,
+    compute_zipf_coefficient
 )
 
+# Import extended metrics
+# (Currently none implemented - see extended/README.md for planned metrics)
+
 __all__ = [
-    "measure_repetition_rate",
-    "measure_ngram_repetition",
-    "count_repeated_ngrams",
-    "compute_self_bleu",
-    "distinct_n_grams",
-    "compute_entropy",
-    "vocabulary_diversity",
-    "compute_perplexity",
-    "compute_perplexity_gap",
-    "measure_coherence",
-    "measure_semantic_similarity"
+    # Core metrics (Holtzman et al. 2019)
+    'measure_repetition_rate',
+    'compute_perplexity',
+    'compute_perplexity_gap',
+    'compute_self_bleu',
+    'compute_zipf_coefficient'
 ]
