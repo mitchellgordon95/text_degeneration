@@ -9,6 +9,7 @@ from ..metrics.core import (
     measure_repetition_rate,
     compute_self_bleu,
     compute_perplexity,
+    compute_perplexity_gap,
     compute_zipf_coefficient
 )
 
@@ -19,9 +20,10 @@ class DegenerationExperiment(BaseExperiment):
     Measures repetition, diversity, perplexity, and Zipf coefficient.
     """
 
-    def __init__(self, config: Dict[str, Any], prompts: List[str], output_dir: str = "outputs"):
+    def __init__(self, config: Dict[str, Any], prompts: List[str], output_dir: str = "outputs", human_continuations: List[str] = None):
         super().__init__("degeneration", config, prompts, output_dir)
         self.max_length = config.get("max_length", 256)
+        self.human_continuations = human_continuations
 
     def generate_outputs(self, model, method: str) -> List[str]:
         """Generate outputs with specified method."""
@@ -51,6 +53,9 @@ class DegenerationExperiment(BaseExperiment):
         elif method.startswith("top_k_"):
             top_k = int(method.split("_")[2])  # top_k_50 -> get the "50" part
             return model.generate_top_k(prompt, top_k, max_length)
+        elif method == "pure_sampling":
+            # Pure sampling: temperature=1.0, no truncation (top_p=1.0, top_k=None)
+            return model.generate_temperature(prompt, 1.0, max_length)
         elif method == "temperature" or method.startswith("temperature_"):
             if "_" in method:
                 temperature = float(method.split("_")[1])
@@ -79,11 +84,28 @@ class DegenerationExperiment(BaseExperiment):
         self_bleu = compute_self_bleu(valid_outputs, n=4)
         zipf_coef = compute_zipf_coefficient(valid_outputs)
 
-        # Perplexity (if model supports it)
+        # Perplexity gap (if model supports it and we have human continuations)
         perplexity = float('inf')
+        human_perplexity = float('inf')
+        overconfidence_ratio = float('inf')
+
         if model and hasattr(model, 'compute_perplexity'):
             try:
+                # Compute perplexity on generated texts
                 perplexity = compute_perplexity(model, valid_outputs)
+
+                # If we have human continuations, compute perplexity gap
+                if self.human_continuations:
+                    # Use same number of human texts as generated texts for fair comparison
+                    human_texts = self.human_continuations[:len(valid_outputs)]
+                    perplexity_gap_results = compute_perplexity_gap(
+                        model,
+                        valid_outputs,
+                        human_texts
+                    )
+                    perplexity = perplexity_gap_results["generated_perplexity"]
+                    human_perplexity = perplexity_gap_results["human_perplexity"]
+                    overconfidence_ratio = perplexity_gap_results["overconfidence_ratio"]
             except:
                 pass  # Some models may not support perplexity
 
@@ -91,6 +113,8 @@ class DegenerationExperiment(BaseExperiment):
             "repetition_rate": repetition_rate,
             "self_bleu": self_bleu if self_bleu >= 0 else None,
             "perplexity": perplexity,
+            "human_perplexity": human_perplexity,
+            "overconfidence_ratio": overconfidence_ratio,
             "zipf_coefficient": zipf_coef,
             "num_outputs": len(valid_outputs)
         }
@@ -109,6 +133,8 @@ class DegenerationExperiment(BaseExperiment):
                     "repetition_rate": metrics.get("repetition_rate", 0),
                     "self_bleu": metrics.get("self_bleu", 0),
                     "perplexity": metrics.get("perplexity", float('inf')),
+                    "human_ppl": metrics.get("human_perplexity", float('inf')),
+                    "overconf_ratio": metrics.get("overconfidence_ratio", float('inf')),
                     "zipf_coefficient": metrics.get("zipf_coefficient", 0)
                 })
 

@@ -1,14 +1,14 @@
 #!/usr/bin/env python3
 """
-Script to download and extract prompts from WebText-style data.
-We'll use OpenWebText or similar publicly available datasets.
+Script to download and extract prompts AND human continuations from WebText-style data.
+For computing perplexity gap, we need both the prompt and the human continuation.
 """
 
 import json
 import random
 import requests
 from pathlib import Path
-from typing import List, Dict
+from typing import List, Dict, Tuple
 import re
 
 
@@ -39,83 +39,45 @@ def get_prompts_from_huggingface():
         texts = []
         for item in dataset:
             text = item['text'].strip()
-            # Filter for substantial paragraphs
-            if len(text) > 100 and not text.startswith('='):  # Skip headers
+            # Filter for substantial paragraphs (need at least 256 tokens for prompt + continuation)
+            if len(text.split()) > 256 and not text.startswith('='):  # Skip headers
                 texts.append(text)
 
-        print(f"Found {len(texts)} text passages")
+        print(f"Found {len(texts)} text passages with sufficient length")
         return texts
 
     except ImportError:
-        print("datasets library not installed, using alternative method...")
-        return get_sample_webtext_style_prompts()
+        print("ERROR: datasets library not installed. Please run: pip install datasets")
+        return []
 
 
-def get_sample_webtext_style_prompts():
+
+
+def extract_prompts_and_continuations(
+    texts: List[str],
+    num_samples: int = 200,
+    min_prompt_tokens: int = 10,
+    max_prompt_tokens: int = 40,
+    total_tokens: int = 256
+) -> Tuple[List[str], List[str]]:
     """
-    If we can't access datasets, provide high-quality WebText-style prompts.
-    These are designed to match the style and quality of WebText.
-    """
-    # These are longer, more realistic prompts similar to WebText
-    prompts = [
-        "The development of quantum computing has accelerated rapidly in recent years, with major technology companies investing billions of dollars in research. These powerful machines promise to revolutionize fields from cryptography to drug discovery",
-
-        "Climate scientists have been tracking the unprecedented rate of ice melt in Antarctica, where massive glaciers are collapsing into the ocean at alarming speeds. The West Antarctic Ice Sheet alone contains enough frozen water",
-
-        "The rise of artificial intelligence in healthcare has begun transforming how doctors diagnose and treat patients. Machine learning algorithms can now detect certain cancers earlier than human radiologists",
-
-        "In the depths of the Amazon rainforest, researchers have discovered a complex network of ancient settlements connected by road systems. These pre-Columbian civilizations were far more sophisticated",
-
-        "The global supply chain crisis that emerged during the pandemic has forced companies to reconsider their manufacturing strategies. Many corporations are now moving production closer to home",
-
-        "Neuroscientists studying the human brain have made remarkable discoveries about how memories are formed and stored. Using advanced imaging techniques, they can now observe neural pathways",
-
-        "The James Webb Space Telescope has captured images of galaxies that formed just a few hundred million years after the Big Bang. These observations are challenging our understanding",
-
-        "Renewable energy sources have become increasingly cost-competitive with fossil fuels, leading to a dramatic shift in global energy markets. Solar and wind power installations",
-
-        "The discovery of CRISPR gene-editing technology has opened unprecedented possibilities for treating genetic diseases. Scientists can now precisely modify DNA sequences",
-
-        "Archaeological excavations in Turkey have uncovered what may be the world's oldest known temple complex, dating back nearly 12,000 years. The site at Göbekli Tepe predates",
-
-        "The rapid evolution of electric vehicle technology has pushed traditional automakers to completely reimagine their business models. Battery costs have fallen by more than 80 percent",
-
-        "Marine biologists exploring the deep ocean have discovered ecosystems thriving in complete darkness around hydrothermal vents. These unique environments host species",
-
-        "The mathematics behind modern cryptography relies on problems that are easy to verify but computationally difficult to solve. As quantum computers become more powerful",
-
-        "Linguists studying endangered languages estimate that half of the world's 7,000 languages will disappear within the next century. Each language that vanishes takes with it",
-
-        "The human microbiome, consisting of trillions of bacteria living in and on our bodies, plays a crucial role in our health. Recent research has shown connections between gut bacteria",
-
-        "Astronomers have detected mysterious radio signals from distant galaxies that repeat in predictable patterns. These fast radio bursts release as much energy in milliseconds",
-
-        "The development of mRNA vaccines during the COVID-19 pandemic has revolutionized our approach to preventing infectious diseases. This technology, decades in the making",
-
-        "Urban planners are increasingly turning to data science and artificial intelligence to design more efficient and livable cities. Smart traffic systems can now predict",
-
-        "The discovery of gravitational waves has opened an entirely new window for observing the universe. These ripples in spacetime, first predicted by Einstein",
-
-        "Coral reefs around the world are experiencing unprecedented bleaching events due to rising ocean temperatures. Scientists estimate that 90 percent of reefs could disappear",
-    ]
-
-    return prompts
-
-
-def extract_prompts(texts: List[str], num_prompts: int = 200, min_tokens: int = 10, max_tokens: int = 40) -> List[str]:
-    """
-    Extract prompts of appropriate length from text passages.
+    Extract prompts and their human continuations from text passages.
 
     Args:
         texts: List of text passages
-        num_prompts: Number of prompts to extract
-        min_tokens: Minimum prompt length in tokens
-        max_tokens: Maximum prompt length in tokens
+        num_samples: Number of prompt-continuation pairs to extract
+        min_prompt_tokens: Minimum prompt length in tokens
+        max_prompt_tokens: Maximum prompt length in tokens
+        total_tokens: Total length of prompt + continuation
+
+    Returns:
+        Tuple of (prompts, continuations)
     """
     prompts = []
+    continuations = []
 
     for text in texts:
-        if len(prompts) >= num_prompts:
+        if len(prompts) >= num_samples:
             break
 
         # Clean text
@@ -126,39 +88,55 @@ def extract_prompts(texts: List[str], num_prompts: int = 200, min_tokens: int = 
         # Split into words (simple tokenization)
         words = text.split()
 
-        if len(words) < min_tokens:
+        # Need enough tokens for prompt + continuation
+        if len(words) < total_tokens:
             continue
 
-        # Take between min_tokens and max_tokens from the beginning
-        prompt_length = min(random.randint(min_tokens, max_tokens), len(words))
+        # Determine prompt length (random between min and max)
+        prompt_length = random.randint(min_prompt_tokens, max_prompt_tokens)
+
+        # Extract prompt and continuation
         prompt = " ".join(words[:prompt_length])
 
-        # Clean up the prompt
-        # Remove incomplete sentences if possible
-        if prompt_length < len(words):
-            # Try to end at a reasonable point (not mid-word)
-            prompt = prompt.rsplit(' ', 1)[0] if ' ' in prompt else prompt
+        # Continuation is the next tokens up to total_tokens
+        continuation_length = total_tokens - prompt_length
+        continuation = " ".join(words[prompt_length:prompt_length + continuation_length])
 
         prompts.append(prompt)
+        continuations.append(continuation)
 
-    # Shuffle for variety
-    random.shuffle(prompts)
-
-    return prompts[:num_prompts]
+    return prompts[:num_samples], continuations[:num_samples]
 
 
-def save_prompts_to_yaml(prompts: List[str], output_path: str = "config/prompts.yaml"):
+def save_prompts_to_yaml(
+    prompts: List[str],
+    continuations: List[str],
+    output_path: str = "config/prompts.yaml"
+):
     """
-    Save prompts to YAML configuration file.
+    Save prompts and human continuations to YAML configuration file.
     """
     import yaml
 
+    # Create prompt-continuation pairs for easier access
+    prompt_continuation_pairs = [
+        {"prompt": p, "continuation": c}
+        for p, c in zip(prompts, continuations)
+    ]
+
     config = {
-        "# Note": "WebText-style prompts extracted from high-quality text sources",
+        "# Note": "WebText-style prompts and human continuations for perplexity gap calculation",
         "# Source": "Similar to prompts used in Holtzman et al. 2019",
         "# Prompt length": "10-40 tokens as in the original paper",
+        "# Total length": "256 tokens (prompt + continuation)",
 
         "webtext_prompts": prompts[:200],  # Keep 200 prompts
+
+        "# Human continuations for perplexity gap": "",
+        "human_continuations": continuations[:200],  # Matching continuations
+
+        "# Prompt-continuation pairs": "",
+        "prompt_continuation_pairs": prompt_continuation_pairs[:200],
 
         "# For experiments": "",
         "default_prompts": prompts[:20],  # Quick testing
@@ -187,38 +165,43 @@ def save_prompts_to_yaml(prompts: List[str], output_path: str = "config/prompts.
     with open(output_path, 'w') as f:
         yaml.dump(config, f, default_flow_style=False, sort_keys=False, allow_unicode=True)
 
-    print(f"Saved {len(prompts)} prompts to {output_path}")
+    print(f"Saved {len(prompts)} prompts and continuations to {output_path}")
 
 
 def main():
-    """Main function to get and process WebText prompts."""
+    """Main function to get and process WebText prompts with continuations."""
     random.seed(42)  # For reproducibility
 
     # Get text data
     texts = get_prompts_from_huggingface()
 
-    if not texts:
-        print("Using fallback WebText-style prompts...")
-        texts = get_sample_webtext_style_prompts()
+    if not texts or len(texts) == 0:
+        print("ERROR: No texts found. Make sure datasets library is installed.")
+        return
 
-    # Extract prompts of appropriate length
-    prompts = extract_prompts(
+    # Extract prompts and continuations
+    prompts, continuations = extract_prompts_and_continuations(
         texts,
-        num_prompts=200,  # Get 200 prompts
-        min_tokens=10,     # Minimum 10 tokens
-        max_tokens=40      # Maximum 40 tokens (as in Holtzman)
+        num_samples=min(200, len(texts)),  # Get up to 200 samples
+        min_prompt_tokens=10,     # Minimum 10 tokens for prompt
+        max_prompt_tokens=40,     # Maximum 40 tokens for prompt
+        total_tokens=256          # Total 256 tokens (matching experiment max_length)
     )
 
-    print(f"\nExtracted {len(prompts)} prompts")
-    print("\nSample prompts:")
-    for i, prompt in enumerate(prompts[:5], 1):
-        tokens = len(prompt.split())
-        print(f"\n{i}. [{tokens} tokens] {prompt[:100]}...")
+    print(f"\nExtracted {len(prompts)} prompt-continuation pairs")
+    print("\nSample prompt-continuation pairs:")
+    for i in range(min(3, len(prompts))):
+        prompt_tokens = len(prompts[i].split())
+        cont_tokens = len(continuations[i].split())
+        print(f"\n{i+1}. Prompt [{prompt_tokens} tokens]: {prompts[i][:80]}...")
+        print(f"   Continuation [{cont_tokens} tokens]: {continuations[i][:80]}...")
+        print(f"   Total tokens: {prompt_tokens + cont_tokens}")
 
     # Save to YAML
-    save_prompts_to_yaml(prompts)
+    save_prompts_to_yaml(prompts, continuations)
 
-    print("\n✓ Prompts ready for experiments!")
+    print("\n✓ Prompts and continuations ready for experiments!")
+    print("   Use human_continuations for perplexity gap calculation")
 
 
 if __name__ == "__main__":

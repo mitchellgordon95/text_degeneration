@@ -15,11 +15,11 @@ experiments:
       - llama3-70b     # Available
     methods:
       - greedy
-      - beam_5
-      - beam_10
-      - nucleus_0.95
-      - nucleus_0.9
-      - top_k_50
+      - beam_16        # Match Holtzman's beam size
+      - beam_10        # Additional comparison
+      - pure_sampling  # Temperature=1.0, no truncation
+      - top_k_40       # Match Holtzman's k value
+      - nucleus_0.95   # Holtzman's recommended
     num_samples: 200
     max_length: 256
     n_gram_size: 4
@@ -52,51 +52,19 @@ experiments:
     max_length: 256
     n_gram_size: 4
 
-  # Only test perplexity on models that support it
-  perplexity_local:
-    description: "Test perplexity gap for local models (full logprobs)"
-    models:
-      - gpt2           # Fast baseline
-      - gpt2-large     # Verified working
-      - qwen2.5-7b     # Modern 7B model
-      - qwen2.5-72b    # Large model verified working
-      - mixtral-8x7b   # MoE architecture verified working
-      - mistral-7b     # Available
-      - mistral-small-3-24b  # Available
-      - llama3-70b     # Available
-    methods:
-      - beam_10
-      - nucleus_0.95
-    num_samples: 100  # Reduced for testing
-    max_length: 256
+  # Note: Perplexity gap is now computed as part of degeneration experiments
+  # No need for separate perplexity experiments
 
-  perplexity_openai:
-    description: "Test perplexity gap for OpenAI (approximate, top-5 only)"
-    models:
-      - gpt-4
-    methods:
-      - nucleus_0.95  # Skip beam search
-    num_samples: 50   # Reduced due to API costs and limitations
-    max_length: 256
-
-  # Only test tail analysis on models that support full distributions
-  tail_analysis:
-    description: "Test reliability of low-probability tokens (local models only)"
-    models:
-      - gpt2           # Fast baseline
-      - gpt2-large     # Verified working
-      - qwen2.5-7b     # Modern 7B model
-      - qwen2.5-72b    # Large model verified working
-      - mixtral-8x7b   # MoE architecture verified working
-      - mistral-7b     # Available
-      - mistral-small-3-24b  # Available
-      - llama3-70b     # Available
-    probability_ranges:
-      head: [0.0, 0.1]     # Top 10% probability mass
-      middle: [0.1, 0.5]   # 10-50% probability mass
-      tail: [0.95, 1.0]    # Bottom 5% probability mass
-    samples_per_range: 20
-    max_length: 100
+  # Future experiments (not yet implemented)
+  # tail_analysis:
+  #   description: "Test reliability of low-probability tokens (local models only)"
+  #   models: [gpt2, gpt2-large, qwen2.5-7b, qwen2.5-72b, mixtral-8x7b]
+  #   probability_ranges:
+  #     head: [0.0, 0.1]     # Top 10% probability mass
+  #     middle: [0.1, 0.5]   # 10-50% probability mass
+  #     tail: [0.95, 1.0]    # Bottom 5% probability mass
+  #   samples_per_range: 20
+  #   max_length: 100
 
   # Task-specific experiments (commented out for now)
   # TODO: Need to create proper creative and factual prompt files
@@ -123,21 +91,12 @@ experiments:
   #       prompts_file: "prompts/code.txt"      # TODO: Create this file
   #       num_samples: 20
 
-  beam_curse:
-    description: "Test if quality decreases with larger beam sizes"
-    models:
-      # Only open source models support beam search
-      - gpt2           # Fast baseline
-      - gpt2-large     # Verified working
-      - qwen2.5-7b     # Modern 7B model
-      - qwen2.5-72b    # Large model verified working
-      - mixtral-8x7b   # MoE architecture verified working
-      - mistral-7b     # Available
-      - mistral-small-3-24b  # Available
-      - llama3-70b     # Available
-    beam_sizes: [1, 2, 5, 10, 20, 50]
-    num_samples: 100
-    max_length: 256
+  # beam_curse:
+  #   description: "Test if quality decreases with larger beam sizes"
+  #   models: [gpt2, gpt2-large, qwen2.5-7b, qwen2.5-72b, mixtral-8x7b]
+  #   beam_sizes: [1, 2, 5, 10, 20, 50]
+  #   num_samples: 100
+  #   max_length: 256
 
 # Default parameters for all experiments
 defaults:

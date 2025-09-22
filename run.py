@@ -63,7 +63,7 @@ def filter_available_models(model_names, models_config):
     return available_models
 
 
-def run_degeneration_experiment(config, model_names, models_config, prompts, experiment_name="degeneration_local"):
+def run_degeneration_experiment(config, model_names, models_config, prompts, human_continuations, experiment_name="degeneration_local"):
     """Run the degeneration (repetition) experiment."""
     exp_config = config["experiments"][experiment_name]
 
@@ -75,8 +75,8 @@ def run_degeneration_experiment(config, model_names, models_config, prompts, exp
         print("❌ No models available for experiment")
         return None
 
-    # Create and run experiment
-    experiment = DegenerationExperiment(exp_config, prompts)
+    # Create and run experiment with human continuations for perplexity gap
+    experiment = DegenerationExperiment(exp_config, prompts, human_continuations=human_continuations)
     results = experiment.run(available_models, models_config)
 
     return experiment
@@ -86,7 +86,7 @@ def main():
     parser = argparse.ArgumentParser(description="Run text degeneration experiments")
     parser.add_argument(
         "--experiment",
-        choices=["degeneration_local", "degeneration_openai", "degeneration_anthropic", "perplexity_local", "perplexity_openai", "tail_analysis", "beam_curse", "all"],
+        choices=["degeneration_local", "degeneration_openai", "degeneration_anthropic"],
         default="degeneration_local",
         help="Which experiment to run"
     )
@@ -146,10 +146,18 @@ def main():
     config = load_config(args.config)
     models_config = load_config(args.models_config)["models"]
 
-    # Load prompts
-    print("Loading prompts...")
+    # Load prompts and human continuations
+    print("Loading prompts and human continuations...")
     prompts = load_prompts(args.prompts_config)
     print(f"Loaded {len(prompts)} prompts")
+
+    # Load human continuations for perplexity gap calculation
+    import yaml
+    with open(args.prompts_config, 'r') as f:
+        prompts_data = yaml.safe_load(f)
+    human_continuations = prompts_data.get('human_continuations', [])
+    if human_continuations:
+        print(f"Loaded {len(human_continuations)} human continuations for perplexity gap")
 
     # Get experiment config
     exp_name = args.experiment
@@ -182,7 +190,7 @@ def main():
 
     try:
         if exp_name in ["degeneration_local", "degeneration_openai", "degeneration_anthropic"]:
-            experiment = run_degeneration_experiment(config, exp_config["models"], models_config, prompts, exp_name)
+            experiment = run_degeneration_experiment(config, exp_config["models"], models_config, prompts, human_continuations, exp_name)
 
             if experiment:
                 # Print results summary
@@ -192,8 +200,38 @@ def main():
 
                 # Analyze results
                 df = experiment.analyze_results()
-                print("\nRepetition Rates by Model and Method:")
-                print(df.to_string(index=False))
+
+                # Format output like Holtzman's Table 1
+                print("\n" + "="*80)
+                print("RESULTS (Format: Holtzman et al. 2019 Table 1)")
+                print("="*80)
+
+                # Group by model and display each model's results
+                for model_name in df['model'].unique():
+                    model_df = df[df['model'] == model_name]
+                    print(f"\nModel: {model_name}")
+                    print("-" * 80)
+                    print(f"{'Method':<20} {'Self-BLEU4':<12} {'Repetition%':<12} {'Perplexity':<12} {'Human PPL':<12} {'Overconf':<10}")
+                    print("-" * 80)
+
+                    for _, row in model_df.iterrows():
+                        self_bleu = f"{row['self_bleu']:.2f}" if row['self_bleu'] is not None and row['self_bleu'] >= 0 else "N/A"
+                        perplexity = f"{row['perplexity']:.2f}" if row['perplexity'] != float('inf') else "N/A"
+                        human_ppl = f"{row['human_ppl']:.2f}" if row['human_ppl'] != float('inf') else "N/A"
+                        overconf = f"{row['overconf_ratio']:.2f}x" if row['overconf_ratio'] != float('inf') else "N/A"
+
+                        print(f"{row['method']:<20} {self_bleu:<12} {row['repetition_rate']:>11.2f}% {perplexity:<12} {human_ppl:<12} {overconf:<10}")
+
+                print("\n" + "="*80)
+                print("BASELINE COMPARISON (Holtzman et al. 2019 - GPT-2 Large)")
+                print("="*80)
+                print(f"{'Method':<20} {'Self-BLEU4':<12} {'Repetition%':<12} {'Perplexity':<12}")
+                print("-" * 80)
+                print(f"{'Human':<20} {'0.31':<12} {'0.28%':<12} {'12.38':<12}")
+                print(f"{'Greedy':<20} {'0.50':<12} {'73.66%':<12} {'1.50':<12}")
+                print(f"{'Beam-16':<20} {'0.44':<12} {'28.94%':<12} {'1.48':<12}")
+                print(f"{'Top-k-40':<20} {'0.39':<12} {'0.78%':<12} {'6.88':<12}")
+                print(f"{'Nucleus-0.95':<20} {'0.32':<12} {'0.36%':<12} {'13.13':<12}")
 
                 # Compare to Holtzman if applicable
                 comparison = experiment.compare_to_holtzman()
@@ -206,18 +244,6 @@ def main():
 
                 # Token summary
                 print(f"\nTotal tokens: {experiment.total_tokens:,}")
-
-        elif exp_name in ["perplexity_local", "perplexity_openai"]:
-            print(f"🚧 {exp_name} experiment not yet implemented")
-            return 1
-
-        elif exp_name == "tail_analysis":
-            print(f"🚧 {exp_name} experiment not yet implemented")
-            return 1
-
-        elif exp_name == "beam_curse":
-            print(f"🚧 {exp_name} experiment not yet implemented")
-            return 1
 
         else:
             print(f"❌ Unknown experiment: {exp_name}")
