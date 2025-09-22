@@ -2,84 +2,442 @@
 '# Source': Similar to prompts used in Holtzman et al. 2019
 '# Prompt length': 10-40 tokens as in the original paper
 webtext_prompts:
-- Neuroscientists studying the human brain have made remarkable discoveries about
-  how memories are formed and stored.
-- The rise of artificial intelligence in healthcare has begun
-- The mathematics behind modern cryptography relies on problems that are easy to verify
-  but computationally difficult to solve. As quantum computers become more powerful
-- Archaeological excavations in Turkey have uncovered what may be the world's oldest
-- Climate scientists have been tracking the unprecedented rate of ice melt in
-- Urban planners are increasingly turning to data science and artificial
-- Linguists studying endangered languages estimate that half of the world's 7,000
-  languages will disappear within the next century. Each language that vanishes takes
-  with it
-- The global supply chain crisis that emerged during the pandemic has forced companies
-  to reconsider their manufacturing
-- The discovery of gravitational waves has opened an entirely
-- In the depths of the Amazon rainforest, researchers have discovered a complex network
-  of ancient settlements connected by road systems. These pre-Columbian civilizations
-  were far more sophisticated
-- Astronomers have detected mysterious radio signals from distant galaxies that repeat
-  in predictable patterns. These fast radio bursts release as much energy in milliseconds
-- The discovery of CRISPR gene-editing technology has opened unprecedented possibilities
-  for treating genetic diseases. Scientists can now precisely modify DNA sequences
-- The human microbiome, consisting of trillions of bacteria living in and
-- The rapid evolution of electric vehicle technology has pushed traditional automakers
-  to completely reimagine their business models. Battery costs have fallen by more
-  than 80 percent
-- Marine biologists exploring the deep ocean have discovered ecosystems thriving in
-  complete darkness around hydrothermal vents. These unique environments host species
-- Coral reefs around the world are experiencing unprecedented bleaching events due
-- The development of quantum computing has accelerated rapidly in recent years, with
-  major technology companies investing billions of dollars in research. These powerful
-  machines promise to revolutionize fields from
-- The development of mRNA vaccines during the COVID-19 pandemic has revolutionized
-  our approach to preventing infectious diseases. This technology, decades in the
-  making
-- Renewable energy sources have become increasingly cost-competitive with fossil fuels,
-  leading to a
-- The James Webb Space Telescope has captured images of galaxies that formed just
-  a few hundred
+- Meridian has nine historic districts that are listed on the National Register of
+  Historic Places . The Meridian Downtown Historic District is a combination of two
+  older
+- Originally the games were held in one weekend in June , but as more sports were
+  added , the event was expanded to two weekends . Opening ceremonies always begin
+  on
+- Novelist Edwin Granberry , who won the 1932 O. Henry Award for Best Short Short
+  Story , was born in Meridian
+- The three clawed lobster species Homarus gammarus , H. americanus and Nephrops norvegicus
+  are hosts to the three known species of the animal phylum Cycliophora ; the
+- The city continued to grow thanks to a commission government 's efforts to bring
+  in 90 new industrial plants in 1913 and a booming automobile industry in the 1920s
+  . Even through the stock market crash of 1929
+- Retail is another major employer in the county , with 5 @,@ 280 people employed
+  in April 2010 . Nearly $ 2 billion annually is spent on retail purchases
+- On 30 January 1961 , Headlam joined the staff of Operational Command ( OPCOM ) ,
+  the successor organisation to Home Command , responsible for the direction of RAAF
+  operational units . He took
+- The type specimen of Homarus gammarus was a lectotype selected by Lipke Holthuis
+  in 1974 . It came from 57 ° 53 ′ N 11
+- Amtrak 's Crescent line connects Meridian with the cities of New York , New York
+  ;
+- John Fleming , current U.S. Representative for Louisiana 's 4th congressional district
+  lived in Meridian ;
+- Runs north to West , Mississippi , and south to the Mississippi @-@ Alabama border
+  , where it continues as Alabama State Route 10 . Mississippi Highway 39
+- Human settlement of the island dates from circa 3000 BC and there
+- Shikamaru has ranked highly in the Weekly Shōnen Jump popularity polls for the series
+  , continuously placing in the top ten
+- Today the main settlement on the island is Biggings , just to the east of which
+  is Housa Voe from where the Snolda ferry arrives from its
+- Numerous anime and manga publications have commented on Shikamaru 's character .
+  Many
+- '" Rowin Foula doon ! " refers to the fishermens '' practice of rowing their open
+  fishing boat out to sea until the high cliffs of Foula were no longer visible .
+  This entailed the boat'
+- Jimmie Rodgers , the " Father of Country Music " , was born
+- Otters , grey seals , killer whales and harbour porpoises
+- Joins with I @-@ 20 in the city and runs north through Tuscaloosa , Alabama , ending
+  in Wildwood , Georgia . It also runs south through Hattiesburg , Mississippi , and
+  on
+- Meridian was a small village at the start of the American Civil War in 1861 . Its
+  strategic position at the railroad junction led to the
+- Aquaculture systems for H. gammarus are under development , and production
+- Despite the controversy surrounding the song and its contribution
+- The son of farmers Malcolm and Hilda Headlam , Frank Headlam was born on 15
+- The first pair of pereiopods is armed with a
+- The main settlement on the island today is Biggings , which overlooks Housa Voe
+  and is surrounded by in @-@ bye
+- The Island Def Jam rapper Big K.R.I.T. was born in Meridian . K.R.I.T is known for
+  his many mixtapes and albums such as K.R.I.T. Wuz Here and Cadillactica . He has
+  gained a large following for his
+- Formerly US 45 , but now only exists as an
+- The population of Meridian and its surrounds is fairly observant , with 65 @.@
+- Masashi Kishimoto has noted that he likes Shikamaru due to his easygoing nature
+  despite being
+- Shikamaru approaches the exams with a sense of apathy ; when he battles the Sunagakure
+  ninja Temari , he defeats her but forfeits his match to her , due to his chakra
+  being
+- Meridian is rightly considered an architectural treasure trove being one the nations
+  most intact cities from
+- There are good examples of horizontal water mills , also known as Norse or Clack
+  Mills , around Dutch Loch . Originally
+- Headlam became Officer Commanding North @-@ Western Area in January 1946 . Posted
+  to Britain at the end of the year , he
+- Paul Davis , a singer @-@ songwriter best known for the late 1970s and early 1980s
+  pop hits " I Go Crazy " and " ' 65 Love Affair
+- Dill Harris , one of the characters of the Pulitzer Prize @-@ winning novel To Kill
+  a Mockingbird ( 1960 ) , is from Meridian ,
+- Returning to Australia in June 1971 , Headlam took
+- On 19 February 1952 , Headlam became senior air staff officer ( SASO ) at Eastern
+  Area Command in Penrith , New South Wales . During his
+- Returning to Australia , Headlam became Deputy Chief of the Air Staff ( DCAS ) on
+  26 January 1965 . He was appointed a Companion of the Order of the Bath ( CB ) "
+  in
+- Starting in the 1960s and following the construction of highways that made commuting
+  easier , residents began to
+- Gil Carmichael , Meridian businessman and transportation specialist , was the Republican
+  nominee for the Mississippi Senate in 1966 and 1967 , U.S. Senate in 1972 , governor
+  in 1975 and 1979 , and lieutenant governor in
+- Shikamaru first major appearance in the series is during the Chunin Exams , bi @-@
+  yearly exams for ninja who wish to advance in rank . He is part of Team 10 alongside
+  Choji Akimichi and Ino Yamanaka .
+- Since 1992 , Meridian has been a host of the State Games of Mississippi , a statewide
+  annual multi @-@ sport event modeled after the Olympic Games . The
+- Meridian Main Street organized several projects to revitalize downtown , including
+  the construction of a new Amtrak Station in 1997 based on the design of the historic
+  train station used during Meridian 's Golden Age
+- The city is also the principal city in the Meridian Arbitron Radio Market , which
+  includes 64 @,@ 500 people over the age of 12 . WJXM ( FM 105 @.@ 7 ) , headquartered
+  at 3436 Highway 45
+- The city contains several recreational parks , including Highland Park , Bonita
+  Lakes , and Okatibbee Lake . Highland Park contains picnic shelters , swimming pools
+  , tennis courts , a baseball field , softball fields , and
+- As the city grew , the hotels reflected ambitions of the strong economy , as evidenced
+  by the eleven @-@ story skyscraper Lamar Hotel built in 1927 . Listed on the National
+  Register of Historic Places in
+- Two realignments in 1963 and 1964 rerouted the western end of the highway again
+  . This time it was
+- '" Angel of Death " caused outrage among survivors of the Holocaust , as well as
+  their families and the general public . The controversy led'
+- Runs parallel to Interstate 59 south to New Orleans , Louisiana , and north all
+  the way to the Canada – US border . U.S. Highway 45
+- The city is served by Meridian Regional Airport , located at Key Field , 2811 Airport
+  Boulevard South , 3 mi ( 4 @.@ 8 km ) southwest of the
+- Papa Stour is the subject of a 1299 manuscript written in Old Norse
+- In downtown , the MSU Riley Center provides revenue from tourism , arts , and entertainment
+  sales . The Riley Center attracts more than 60 @,@ 000 visitors to
+- In the 19th century the Crabbaberry fishing station in West Voe was opened and the
+  island had a population of 360 people or more . However , fuel shortages and
+- Erosion of the soft volcanic rocks by the sea has created an extraordinary variety
+  of caves , stacks , arches , blowholes , cliffs
+- In addition to the larger islets mentioned above there are various other isles and
+  skerries around
+- Homarus gammarus is found across the north @-@ eastern Atlantic Ocean from northern
+  Norway to the Azores and Morocco , not including the Baltic Sea . It is also present
+- The exoskeleton is generally blue above , with spots that coalesce , and yellow
+  below . The red colour associated with lobsters only appears after cooking . This
+  occurs because , in
+- The island church , which overlooks Kirk Sand in the bay of Fore Wick , was founded
+  in 1806 . 300 metres from the present church there may be an older chapel site of
+- Headlam served as Officer Commanding North @-@ Western Area in 1946 , and as Director
+  of Training from 1947 to 1950 . In 1950 – 51
+- The median income for a household in the city was $ 25 @,@ 085 , and the median
+  income for
+- The United States Postal Service operates the Meridian , North Meridian , and the
+  West Meridian Station post offices .
+- It is also the ' Papa ' of Vagaland 's poem Da Sang o da Papa men , now adopted
+  as part of the folksong tradition
+- After ownership of the Meridian Main Street was transferred to the Alliance for
+  Downtown Meridian in late 2007 , the two organizations , along with the Meridian
+  Downtown Association
+- Meridian is the principal city in the Meridian micropolitan area , which as of 2009
+  consisted of three counties – Clarke , Kemper
+- Cullen Bohannon , the protagonist of the AMC series Hell on Wheels , hails from
+  Meridian , Mississippi , where he was a tobacco farmer and
+- Chris Ethridge ( February 10 , 1947 – April 23 , 2012 ) was an American country
+  rock bass guitarist . He was
+- The species can be divided into four genetically distinct populations , one widespread
+  population , and three which have diverged due to small effective population sizes
+  , possibly due to adaptation to
+- The cargo ship SS Highcliffe ran aground in fog on Forewick Holm in February 1940
+  . On this occasion the conditions
+- On the national level , the city is located in Mississippi 's 3rd congressional
+  district , represented by Gregg Harper (
+- The lyrics detail Mengele 's surgical experiments on patients at the Auschwitz concentration
+  camp during World War II . Mengele 's explorations were conducted on such groups
+  as dwarfs and twins ,
+- In addition to the leper colony on Brei Holm there may have been another
+- The park is also home to a 19th @-@ century carousel manufactured around 1895 by
+  Gustav Dentzel
+- The Mississippi Department of Mental Health operates the East Mississippi State
+  Hospital in Meridian .
+- Emmy award winning meteorologist Bill Evans ( meteorologist ) ( WABC @-@ TV New
+  York ) was born in Meridian , where he held
+- Meridian has also been selected as the future location of the Mississippi Arts and
+- The common name for H. gammarus preferred by the Food and Agriculture Organization
+  is " European lobster " , but the species is also widely known as the
+- While the overall population growth of the city has varied , there has been a steady
+  growth in the number and percentage of non @-@ white residents . The
+- In 1469 Shetland came under nominal Scottish control , although the Norse ' Lairds
+  of Norway ' kept their Papa Stour estates until the 17th century . In the
+- Meridian is home to two post @-@ secondary educational institutions . Meridian Community
+  College , founded in 1937 , is located
+- The lyrical content of " Angel of Death " contributed to the delay of the release
+  of Slayer 's 1986 album Reign in Blood . The band were signed to Def Jam Records
+  whose distributor , Columbia
+- 5 Union Station Historic District — roughly bounded by 18th
+- Early on , the economy depended greatly upon the railroads in the area . The city
+  was the largest in Mississippi around the start of the 20th century , with five
+- Along with Lauderdale County and the city of Marion , Meridian is served by the
+  East Mississippi Business Development Corporation , which was formed in 1996 by
+  a group of business leaders from the area . While as
+- Adult H. gammarus live on the continental shelf at depths of 0 – 150 metres ( 0
+  – 492 ft ) , although not normally deeper
+- The current M @-@ 82 dates back to 1926 . It ran from US 31 in Hart to the northern
+  junction of
+- Lewis McAllister , a businessman in Tuscaloosa , Alabama , was the first Republican
+  to serve in the Mississippi
+- Fred and Al Key , known as " The Flying Keys " - holders of the world flight endurance
+  record - are Meridian natives . Al Key is also a former mayor
+- Immigrant Jews from Germany and eastern Europe were influential in commercial development
+  of the city , building businesses and services
+- On 21 June 2008 , Stuart Hill , the owner and only resident
+- 9 West End Historic District — roughly bounded by 7th St , 28th Ave , Shearer
+- Hartley Peavey , founder of Peavey Electronics which is headquartered in Meridian
+  , is a
+- The spines on the claws of H. americanus are red or red @-@ tipped , while
+- Among the city 's many arts organizations and historic buildings are the Riley Center
+  , the Meridian
+- Meridian is in the humid subtropical climate zone . The average high temperature
+  during summer ( June through August ) is around 90 ° F ( 32 ° C )
+- Papa Stour is one of the Shetland Islands in Scotland , with a population of under
+  twenty
+- Crofting is the mainstay of island life . Sheep form the backbone of the agricultural
+  economy but a diversity livestock are kept ,
+- Meridian is the sixth largest city in the state of Mississippi , in the United States
+  . It is the
+- Meridian has operated under the mayor @-@ council or " strong mayor " form of government
+  since 1985 . A mayor is elected every four years by the population at @-@ large
+  .
+- Meridian is located in the North Central Hills region of Mississippi in Lauderdale
+  County . According to the United States
+- Attempts have been made to introduce H. gammarus to New Zealand , alongside other
+  European species such as the edible crab , Cancer pagurus . Between 1904 and 1914
+  , one million lobster larvae were released from
+- Air Vice Marshal Frank Headlam , CB , CBE
+- 'A light novel titled Shikamaru Hiden : A Cloud Drifting in'
+- In April 2010 , there were 6 @,@ 260 people employed in the healthcare field in
+  Lauderdale County . Rush Hospital is the largest healthcare organization in the
+  region ,
+- The natural terrain of the area has been modified in the urban core of the
+- During January 1942 , No. 2 Squadron 's aircraft were dispersed at Penfui , Boeroe
+  Island , and Darwin . The Penfui
+- The city has been selected as the future location of the Mississippi Arts and Entertainment
+  Center ( MAEC ) . Jimmie Rodgers , the " Father of Country Music " , was born in
+- The area is also served by two military facilities , Naval
+- Given Meridian 's site as a railroad junction , its travelers have attracted the
+  development of many hotels . Even before Meridian reached its " Golden Age ,
+- Towards the end of the song , there is a line " Feeding off the screams of the mutants
+  he 's creating " , which was taken from the film
+- From this early district and later additions , the Meridian Public School District
+  grew to its current size ,
+- Seven Klansmen , including a deputy sheriff , were convicted in the federal courthouse
+  in Meridian of " depriving the victims of their civil rights "
+- In common with many small Scottish islands , Papa Stour 's population peaked in
+  the 19th century and has experienced a significant decline since then ( see e.g.
+- After receiving a federal land grant of about 2 @,@ 000 acres ( 810 ha ) , Richard
+  McLemore , the first settler of Meridian , began offering free land to newcomers
+- City Hall , which has been listed on the National Register of Historic Places ,
+  is located at
+- Headlam was promoted to substantive air commodore on 1 January 1955 . In November
+  he was posted
+- George Soulé , the singer @-@ songwriter most famous for the rhythm and
+- The town boomed in the aftermath of the Civil War , and
+- The eggs hatch at night , and the larvae swim to the
+- The guitarist @-@ songwriter George Cummings , born in Meridian in 1938 , was a
+  founding member of Dr. Hook & the Medicine Show .
+- Known for more than a century of arts , Meridian contains many art and
+- The highest point on the island is in the north west at Virda Field , which rises
+  to 87 metres
+- Though the Meridian Star is now the only newspaper printed in the city , there
+- Female H. gammarus reach sexual maturity when they have grown to a carapace length
+  of 80 – 85 millimetres ( 3 @.@ 1 – 3 @.@ 3 in ) , whereas males
+- Following the outbreak of World War II , No. 1 Squadron was engaged in convoy escort
+  and maritime reconnaissance duties off south @-@ eastern Australia . Headlam continued
+  to serve with
+- The underside of the claw of H. americanus is orange or red ,
+- 4 Meridian Urban Center Historic District — roughly bounded by 21st
+- In state politics , the Mississippi Senate district map divides the city
+- Lobsters are mostly fished using lobster pots , although
+- Homarus gammarus is a large crustacean , with a body length up
+- Established in 1860 , at the intersection of the Mobile and Ohio Railroad and Southern
+  Railway of Mississippi , Meridian 's economy was built on the railways and goods
+  transported on them , and it became
+- The area is served by two military facilities , Naval Air Station Meridian and Key
+  Field , which provide over 4 @,@ 000 jobs . NAS Meridian is
+- The rostrum of H. americanus bears one or more spines on the underside , which are
+- The city established a Department of Homeland Security ( DHS )
+- Homarus gammarus is susceptible to the disease gaffkaemia , caused by the bacterium
+  Aerococcus viridans . Although it is frequently found in
+- Rebuilt after the war , the city entered a " Golden Age " it become the largest
+  city in Mississippi
+- There was much competition over the proposed name of the settlement . Ball and the
+  more industrial residents of the city supported the
+- Headlam was given command of No. 2 Squadron at Laverton on 15 April 1941 , and raised
+  to wing commander on 1 July . Equipped with
+- Another location in the city used for large productions is the Hamasa Shrine Temple
+  Theater . The Temple Theater houses a 778 @-@
+- Early public education in Meridian was based on the 1870 Mississippi Constitution
+  . From 1870 to 1885 , trustees appointed by the City Council served on the Board
+  of School Directors , which had
+- The city 's former Grand Opera House was built in 1889 by two half brothers , Israel
+  Marks and Levi Rothenberg . During its operation the opera house hosted many famous
+  artists
+- There is a profusion of wild flowers , including mountain everlasting , spring squill
+  and eyebright as well as the ubiquitous heather . The west side of the island is
+  a Site of Special Scientific Interest
+- The average annual precipitation in the city is 58 @.@ 65 in ( 1 @,@ 490 mm
+- 3 Meridian Downtown Historic District — runs from the former Gulf , Mobile and Ohio
+  Railroad north to 6th St between 18th and 26th Ave , excluding Ragsdale Survey Block
+  71 .
+- Besides the Naruto anime and manga , Shikamaru is featured in seven
+- In 1953 the spectacular headland , ' Da Horn o Papa ' fell into the sea during a
+  storm . The nearby islet of Brei Holm also has caves that can be accessed
+- Several publications for manga , anime , video games , and other
+- The total manufacturing employment of Lauderdale County in April 2010 was 2 @,@
+  850 people . Peavey Electronics Corporation , which has manufactured guitars , amplifiers
+  , and
+- '... in fairyland , so exquisite is the colouring of the'
+- Papa Stour 's most recent shipwreck occurred on 9 December 1977 when the Aberdeen
+  trawler Elinor Viking A278 , skipper Alec Flett , foundered on the Ve Skerries
+- The first usage of M @-@ 82 was in the Upper Peninsula by July 1 , 1919 . The trunkline
+  started at M @-@ 25 and ran north of Newberry to
+- Alvin Childress , who played the lead role in the Amos ' n ' Andy Show , was born
+  in the city in 1907 .
+- There are also several golf courses in the city , including the aforementioned Lakeview
+  Municipal Golf Course , an 18 @-@ hole course open to the
+- The island is composed of a variety of volcanic and sedimentary rock formations
+  from the Devonian period . At that time the Scottish landmass formed
+- Headlam remained in Darwin as Controller of Operations at Headquarters North @-@
+  Western Area Command until
+- The only daily newspaper printed in the city is The Meridian
+- Homarus gammarus is traditionally " highly esteemed " as a
+- During the Great Depression , residents of the city contemplated abandoning the
+  airport because of the cost of maintenance
+- H. gammarus is the type species of the genus Homarus Weber , 1795 , as determined
+- Homarus gammarus was first given a binomial name by Carl Linnaeus in the tenth edition
+- Tom Stuart from 1973 to 1977 was the first Republican to serve as mayor of Meridian
+  in the 20th century .
+- Numerous shipwrecks have occurred around the coast , and the celebrated poem Da
+  Sang o da Papa Men by Vagaland recalls the
+- The diet of H. gammarus mostly consists of other benthic invertebrates
+- Previously inhabited by the Choctaw Native Americans , the area
+- 1 East End Historic District — roughly bounded by 18th St , 11th Ave ,
+- The city 's growth has reflected the push and pull of many social and economic factors
+  .
+- 'Slayer guitarist Jeff Hanneman wrote " Angel of Death " after reading books about
+  Nazi physician Josef Mengele while on tour with the band : " I remember stopping
+  someplace'
+- The closest relative of H. gammarus is the American lobster , Homarus americanus
+  . The two species
+- Runs west through Jackson , Mississippi , eventually terminating near Kent , Texas
+  , and east through Tuscaloosa , Alabama , eventually terminating in Florence , South
+  Carolina . Interstate 59
+- 8 Poplar Springs Road Historic District — roughly bounded by 29th St , 23rd Ave
+  , 22nd St , and 29th Ave .
+- David Ruffin , former lead singer of The Temptations , and his older brother Jimmy
+  Ruffin were
+- The writer and journalist John Sands lived on Papa Stour and Foula for a while during
+  the
+- Meridian is served by the Meridian @-@ Lauderdale County Public Library , located
+  at the corner of
+- The city is the principal city in the Meridian , Mississippi Designated Market Area
+  ( DMA ) , which includes 72 @,@ 180 households with televisions . WTOK @-@ TV broadcasts
+  as an ABC affiliate from the city
+- The Michigan Department of Transportation ( MDOT ) , as a part of its
+- According to the 2000 Census , of the 17 @,@ 890 housing units inside city limits
+  , 15 @,@ 966 were occupied , 10 @,@ 033 of them by families . 31 @.@ 1 %
+- M @-@ 82 is a state trunkline in the Lower Peninsula in the US state of Michigan
+  that travels between Fremont and Howard City . The section between Newaygo and Howard
+  City travels
+- In Part II of the series , Shikamaru is assigned the task of locating two members
+  of the criminal
+- The city has also been home to several athletes , many of whom have competed at
+- The coasts around Papa Stour have claimed numerous wrecks . In
+- Papa Stour is located at the south western end of St Magnus Bay . There are 34 kilometres
+  ( 21 mi ) of rugged coastline which is indented by numerous small embayments and
+  four larger ' voes
+- As the city suburbs developed in the 1960s and ' 70s , most hotels moved outside
+  of downtown . Rehabilitation
+- The island has several Neolithic burial chamber sites , as well as the remains of
+  Duke Hakon 's 13th @-@ century house dating from the Norse occupation of the island
+  . The
+- After completing a conversion course , Headlam was assigned to the Seaplane Squadron
+  at Point Cook . No larger than a flight according to the official history of the
+  pre @-@
+- Runs west through Jackson , Mississippi , to Dallas , Texas , and east through Demopolis
+- Shikamaru Nara ( 奈良 シカマル , Nara Shikamaru ) is a fictional character in the Naruto
+  manga
+- Transnational route which runs north through Columbus , Mississippi ,
+- After a brief slowdown of the economy at the end of the Depression , the country
+  entered World War II ,
+- The Papa Stour sword dance may be of Norse origin and bears similarities to the
+  long sword dance of the north east of England .
+- The Aberdeen trawler Ben Doran A178 , foundered on the Ve Skerries 3 miles northwest
+  of Papa Stour , on the
+- Homarus gammarus , known as the European lobster or common lobster , is a species
+  of clawed lobster from the eastern Atlantic Ocean , Mediterranean Sea and parts
+  of
+- Highland Park houses a Jimmie Rodgers museum which displays the original guitar
+  of " The Singing Brakeman " and other memorabilia
+- M @-@ 82 begins at a junction with M @-@ 120 and B @-@ 96 west of Fremont . This
+  junction is at a tripoint of county lines . M @-@ 120 forms the
+- The Meridian Council for the Arts ( MCA ) was founded as Meridian 's and Lauderdale
+  County 's official arts agency in 1978 . MCA operates
+- The E.F. Young Hotel was built in 1931 . A staple in the African @-@ American business
+  district that developed west of the city 's core , the hotel was one of the only
+  places in
+- Headlam completed a flying instructors course in July 1936 and joined the staff
+  of No. 1 FTS . He was promoted to flight lieutenant on 1 March 1937 .
+- Headed by police chief Lee Shelbourn since 2009 , the Meridian Police Department
+  consists of 115 full @-@ time officers as well as part @-@ time and reserve staff
+  available . In 2009 , the department
+- Brei Holm and Maiden Stack guard the harbour entrance to the south . The former
+  is a tidal island and was a leper colony until the 18th
+- '" Sewn together , joining heads . Just a matter of time'
+- During the American Civil Rights Movement in the 1960s , Meridian
+- '" Angel of Death " is the opening track on the American thrash metal band Slayer
+  ''s 1986 album Reign in Blood . The lyrics and music were written by Slayer guitarist
+  , Jeff Hanneman and are based on'
 '# For experiments': ''
 default_prompts:
-- Neuroscientists studying the human brain have made remarkable discoveries about
-  how memories are formed and stored.
-- The rise of artificial intelligence in healthcare has begun
-- The mathematics behind modern cryptography relies on problems that are easy to verify
-  but computationally difficult to solve. As quantum computers become more powerful
-- Archaeological excavations in Turkey have uncovered what may be the world's oldest
-- Climate scientists have been tracking the unprecedented rate of ice melt in
-- Urban planners are increasingly turning to data science and artificial
-- Linguists studying endangered languages estimate that half of the world's 7,000
-  languages will disappear within the next century. Each language that vanishes takes
-  with it
-- The global supply chain crisis that emerged during the pandemic has forced companies
-  to reconsider their manufacturing
-- The discovery of gravitational waves has opened an entirely
-- In the depths of the Amazon rainforest, researchers have discovered a complex network
-  of ancient settlements connected by road systems. These pre-Columbian civilizations
-  were far more sophisticated
-- Astronomers have detected mysterious radio signals from distant galaxies that repeat
-  in predictable patterns. These fast radio bursts release as much energy in milliseconds
-- The discovery of CRISPR gene-editing technology has opened unprecedented possibilities
-  for treating genetic diseases. Scientists can now precisely modify DNA sequences
-- The human microbiome, consisting of trillions of bacteria living in and
-- The rapid evolution of electric vehicle technology has pushed traditional automakers
-  to completely reimagine their business models. Battery costs have fallen by more
-  than 80 percent
-- Marine biologists exploring the deep ocean have discovered ecosystems thriving in
-  complete darkness around hydrothermal vents. These unique environments host species
-- Coral reefs around the world are experiencing unprecedented bleaching events due
-- The development of quantum computing has accelerated rapidly in recent years, with
-  major technology companies investing billions of dollars in research. These powerful
-  machines promise to revolutionize fields from
-- The development of mRNA vaccines during the COVID-19 pandemic has revolutionized
-  our approach to preventing infectious diseases. This technology, decades in the
-  making
-- Renewable energy sources have become increasingly cost-competitive with fossil fuels,
-  leading to a
-- The James Webb Space Telescope has captured images of galaxies that formed just
-  a few hundred
+- Meridian has nine historic districts that are listed on the National Register of
+  Historic Places . The Meridian Downtown Historic District is a combination of two
+  older
+- Originally the games were held in one weekend in June , but as more sports were
+  added , the event was expanded to two weekends . Opening ceremonies always begin
+  on
+- Novelist Edwin Granberry , who won the 1932 O. Henry Award for Best Short Short
+  Story , was born in Meridian
+- The three clawed lobster species Homarus gammarus , H. americanus and Nephrops norvegicus
+  are hosts to the three known species of the animal phylum Cycliophora ; the
+- The city continued to grow thanks to a commission government 's efforts to bring
+  in 90 new industrial plants in 1913 and a booming automobile industry in the 1920s
+  . Even through the stock market crash of 1929
+- Retail is another major employer in the county , with 5 @,@ 280 people employed
+  in April 2010 . Nearly $ 2 billion annually is spent on retail purchases
+- On 30 January 1961 , Headlam joined the staff of Operational Command ( OPCOM ) ,
+  the successor organisation to Home Command , responsible for the direction of RAAF
+  operational units . He took
+- The type specimen of Homarus gammarus was a lectotype selected by Lipke Holthuis
+  in 1974 . It came from 57 ° 53 ′ N 11
+- Amtrak 's Crescent line connects Meridian with the cities of New York , New York
+  ;
+- John Fleming , current U.S. Representative for Louisiana 's 4th congressional district
+  lived in Meridian ;
+- Runs north to West , Mississippi , and south to the Mississippi @-@ Alabama border
+  , where it continues as Alabama State Route 10 . Mississippi Highway 39
+- Human settlement of the island dates from circa 3000 BC and there
+- Shikamaru has ranked highly in the Weekly Shōnen Jump popularity polls for the series
+  , continuously placing in the top ten
+- Today the main settlement on the island is Biggings , just to the east of which
+  is Housa Voe from where the Snolda ferry arrives from its
+- Numerous anime and manga publications have commented on Shikamaru 's character .
+  Many
+- '" Rowin Foula doon ! " refers to the fishermens '' practice of rowing their open
+  fishing boat out to sea until the high cliffs of Foula were no longer visible .
+  This entailed the boat'
+- Jimmie Rodgers , the " Father of Country Music " , was born
+- Otters , grey seals , killer whales and harbour porpoises
+- Joins with I @-@ 20 in the city and runs north through Tuscaloosa , Alabama , ending
+  in Wildwood , Georgia . It also runs south through Hattiesburg , Mississippi , and
+  on
+- Meridian was a small village at the start of the American Civil War in 1861 . Its
+  strategic position at the railroad junction led to the
 '# Task-specific prompts remain the same': ''
 creative_prompts:
 - Once upon a time in a land far away
