@@ -15,7 +15,7 @@ This codebase has **ZERO TOLERANCE** for:
 ### 1. **ALWAYS Run Verification First**
 Before any work:
 ```bash
-python verify_setup.py
+python scripts/verify_setup.py
 ```
 If this fails, **fix the issues immediately**. Never proceed with broken verification.
 
@@ -61,7 +61,7 @@ if model_type == "openai":
 
 ### Before Making Changes:
 - [ ] Read `ACADEMIC_PRINCIPLES.md` thoroughly
-- [ ] Run `python verify_setup.py` to ensure starting state is clean
+- [ ] Run `python scripts/verify_setup.py` to ensure starting state is clean
 - [ ] Understand which models/methods the change affects
 
 ### While Making Changes:
@@ -71,7 +71,7 @@ if model_type == "openai":
 - [ ] Add actionable error messages
 
 ### After Making Changes:
-- [ ] Run `python verify_setup.py` and ensure it passes
+- [ ] Run `python scripts/verify_setup.py` and ensure it passes
 - [ ] Fix any verification failures with actionable solutions
 - [ ] Test the specific functionality you changed
 - [ ] Commit only after verification passes
@@ -122,7 +122,7 @@ if model_type == "openai":
 
 ### Planning Experiments:
 1. Check which models support required methods
-2. Use `validate_config.py` to verify experiment configs
+2. Use `scripts/validate_config.py` to verify experiment configs
 3. Plan based on actual capabilities, not assumptions
 
 ### Running Experiments:
@@ -154,7 +154,7 @@ if model_type == "openai":
 
 ## 🎉 **SUCCESS INDICATORS**
 
-- `python verify_setup.py` passes completely
+- `python scripts/verify_setup.py` passes completely
 - All experiment configurations are valid
 - No silent fallbacks or approximations
 - Error messages provide clear fix instructions

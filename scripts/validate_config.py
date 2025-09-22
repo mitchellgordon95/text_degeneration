@@ -9,8 +9,8 @@ are valid according to the capabilities defined in models.yaml.
 import sys
 from pathlib import Path
 
-# Add src to path
-sys.path.insert(0, str(Path(__file__).parent))
+# Add src to path - go up one level from scripts/ to project root
+sys.path.insert(0, str(Path(__file__).parent.parent))
 
 from src.utils import load_config, validate_experiment_config
 

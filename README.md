@@ -60,7 +60,7 @@ pip install datasets  # If not already installed
 python scripts/get_webtext_prompts.py
 
 # 6. Verify everything works
-python verify_setup.py
+python scripts/verify_setup.py
 
 # 7. Run experiments
 python run.py --experiment degeneration_local    # Local models
@@ -76,7 +76,7 @@ Many models require explicit access approval on HuggingFace:
 
 ```bash
 # Run verification to see which models need access
-python verify_setup.py
+python scripts/verify_setup.py
 
 # Visit links shown for each gated model:
 # - https://huggingface.co/meta-llama/Llama-3.3-70B-Instruct
@@ -144,7 +144,8 @@ python run.py --experiment degeneration_local --num-samples 10
 ├── outputs/                  # Results (auto-created)
 │   ├── raw/                 # Generated texts
 │   └── metrics/             # Computed metrics
-└── run.py                    # Main runner
+├── run.py                    # Main runner
+└── setup.py                  # Package installation
 ```
 
 ## Configuration

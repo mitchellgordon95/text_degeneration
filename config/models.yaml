@@ -7,7 +7,7 @@ models:
     model_id: gpt2
     device: auto
     capabilities:
-      supported_methods: ["greedy", "beam", "temperature", "nucleus", "top_k"]
+      supported_methods: ["greedy", "beam", "temperature", "nucleus", "top_k", "pure_sampling"]
       supports_logprobs: true
       supports_full_logprobs: true
       supports_beam_search: true
@@ -20,7 +20,7 @@ models:
     model_id: gpt2-medium
     device: auto
     capabilities:
-      supported_methods: ["greedy", "beam", "temperature", "nucleus", "top_k"]
+      supported_methods: ["greedy", "beam", "temperature", "nucleus", "top_k", "pure_sampling"]
       supports_logprobs: true
       supports_full_logprobs: true
       supports_beam_search: true
@@ -34,7 +34,7 @@ models:
     device: auto
     load_in_8bit: false  # Set to true if low on VRAM
     capabilities:
-      supported_methods: ["greedy", "beam", "temperature", "nucleus", "top_k"]
+      supported_methods: ["greedy", "beam", "temperature", "nucleus", "top_k", "pure_sampling"]
       supports_logprobs: true
       supports_full_logprobs: true
       supports_beam_search: true
@@ -48,7 +48,7 @@ models:
     device: auto
     load_in_8bit: false
     capabilities:
-      supported_methods: ["greedy", "beam", "temperature", "nucleus", "top_k"]
+      supported_methods: ["greedy", "beam", "temperature", "nucleus", "top_k", "pure_sampling"]
       supports_logprobs: true
       supports_full_logprobs: true
       supports_beam_search: true
@@ -161,7 +161,7 @@ models:
     device: auto
     load_in_8bit: true  # Recommended for consumer GPUs
     capabilities:
-      supported_methods: ["greedy", "beam", "temperature", "nucleus", "top_k"]
+      supported_methods: ["greedy", "beam", "temperature", "nucleus", "top_k", "pure_sampling"]
       supports_logprobs: true
       supports_full_logprobs: true
       supports_beam_search: true
@@ -175,7 +175,7 @@ models:
     device: auto
     load_in_8bit: true  # Required for most GPUs
     capabilities:
-      supported_methods: ["greedy", "beam", "temperature", "nucleus", "top_k"]
+      supported_methods: ["greedy", "beam", "temperature", "nucleus", "top_k", "pure_sampling"]
       supports_logprobs: true
       supports_full_logprobs: true
       supports_beam_search: true
@@ -190,7 +190,7 @@ models:
     device: auto
     load_in_8bit: false
     capabilities:
-      supported_methods: ["greedy", "beam", "temperature", "nucleus", "top_k"]
+      supported_methods: ["greedy", "beam", "temperature", "nucleus", "top_k", "pure_sampling"]
       supports_logprobs: true
       supports_full_logprobs: true
       supports_beam_search: true
@@ -204,7 +204,7 @@ models:
     device: auto
     load_in_8bit: true  # Requires 80GB+ VRAM without quantization
     capabilities:
-      supported_methods: ["greedy", "beam", "temperature", "nucleus", "top_k"]
+      supported_methods: ["greedy", "beam", "temperature", "nucleus", "top_k", "pure_sampling"]
       supports_logprobs: true
       supports_full_logprobs: true
       supports_beam_search: true
@@ -219,7 +219,7 @@ models:
     device: auto
     load_in_8bit: false
     capabilities:
-      supported_methods: ["greedy", "beam", "temperature", "nucleus", "top_k"]
+      supported_methods: ["greedy", "beam", "temperature", "nucleus", "top_k", "pure_sampling"]
       supports_logprobs: true
       supports_full_logprobs: true
       supports_beam_search: true
@@ -233,7 +233,7 @@ models:
     device: auto
     load_in_8bit: true
     capabilities:
-      supported_methods: ["greedy", "beam", "temperature", "nucleus", "top_k"]
+      supported_methods: ["greedy", "beam", "temperature", "nucleus", "top_k", "pure_sampling"]
       supports_logprobs: true
       supports_full_logprobs: true
       supports_beam_search: true
@@ -247,7 +247,7 @@ models:
     device: auto
     load_in_8bit: true  # MoE architecture, efficient but still large
     capabilities:
-      supported_methods: ["greedy", "beam", "temperature", "nucleus", "top_k"]
+      supported_methods: ["greedy", "beam", "temperature", "nucleus", "top_k", "pure_sampling"]
       supports_logprobs: true
       supports_full_logprobs: true
       supports_beam_search: true
@@ -262,7 +262,7 @@ models:
     device: auto
     load_in_8bit: false
     capabilities:
-      supported_methods: ["greedy", "beam", "temperature", "nucleus", "top_k"]
+      supported_methods: ["greedy", "beam", "temperature", "nucleus", "top_k", "pure_sampling"]
       supports_logprobs: true
       supports_full_logprobs: true
       supports_beam_search: true
@@ -276,7 +276,7 @@ models:
     device: auto
     load_in_8bit: true
     capabilities:
-      supported_methods: ["greedy", "beam", "temperature", "nucleus", "top_k"]
+      supported_methods: ["greedy", "beam", "temperature", "nucleus", "top_k", "pure_sampling"]
       supports_logprobs: true
       supports_full_logprobs: true
       supports_beam_search: true

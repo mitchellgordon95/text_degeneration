@@ -158,12 +158,12 @@ else:
 # But model implementation rejects beam search!
 
 # ✅ CORRECT: Verification catches this discrepancy
-verify_setup.py  # Will fail with actionable error message
+python scripts/verify_setup.py  # Will fail with actionable error message
 ```
 
 ## 🔄 **VERIFICATION WORKFLOW**
 
-1. **After ANY configuration change**: Run `python verify_setup.py`
+1. **After ANY configuration change**: Run `python scripts/verify_setup.py`
 2. **Before experiments**: Verification must pass completely
 3. **When adding models**: Test all claimed capabilities
 4. **When updating APIs**: Verify no capabilities lost

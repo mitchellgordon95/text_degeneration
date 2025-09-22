@@ -24,8 +24,8 @@ from pathlib import Path
 from typing import Dict, List, Optional, Any
 import traceback
 
-# Add src to path
-sys.path.insert(0, str(Path(__file__).parent))
+# Add src to path - go up one level from scripts/ to project root
+sys.path.insert(0, str(Path(__file__).parent.parent))
 
 # Import our capability system
 from src.utils.capabilities import (
