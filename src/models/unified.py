@@ -5,6 +5,7 @@ from .base import BaseModel
 from .openai_model import OpenAIModel
 from .anthropic_model import AnthropicModel
 from .huggingface_model import HuggingFaceModel
+from .vllm_model import VLLMModel
 
 
 class UnifiedModel:
@@ -60,6 +61,7 @@ class UnifiedModel:
         """
         # Check if model type is explicitly specified in kwargs
         model_type = kwargs.get("type")
+        engine = kwargs.get("engine", "huggingface")  # Default engine for HF models
 
         if model_type:
             # Use explicit type from config
@@ -68,7 +70,14 @@ class UnifiedModel:
             elif model_type == "anthropic":
                 return AnthropicModel(model_name, **kwargs)
             elif model_type == "huggingface":
-                return HuggingFaceModel(model_name, **kwargs)
+                # Check if vLLM engine is requested
+                if engine == "vllm":
+                    model_id = kwargs.get("model_id", model_name)
+                    # Remove model_id from kwargs to avoid duplicate parameter
+                    vllm_kwargs = {k: v for k, v in kwargs.items() if k != "model_id"}
+                    return VLLMModel(model_name, model_id, **vllm_kwargs)
+                else:
+                    return HuggingFaceModel(model_name, **kwargs)
             else:
                 raise ValueError(
                     f"Unknown model type '{model_type}' for model '{model_name}'. "
@@ -83,7 +92,13 @@ class UnifiedModel:
             return AnthropicModel(model_name, **kwargs)
 
         elif model_name in UnifiedModel.HUGGINGFACE_MODELS:
-            return HuggingFaceModel(model_name, **kwargs)
+            # Check if vLLM engine is requested for inferred HuggingFace models
+            if engine == "vllm":
+                model_id = kwargs.get("model_id", model_name)
+                vllm_kwargs = {k: v for k, v in kwargs.items() if k != "model_id"}
+                return VLLMModel(model_name, model_id, **vllm_kwargs)
+            else:
+                return HuggingFaceModel(model_name, **kwargs)
 
         # Check for patterns in model name
         elif "gpt" in model_name.lower() and not model_name.startswith("gpt2"):
@@ -100,7 +115,13 @@ class UnifiedModel:
                 f"Unknown model '{model_name}', assuming HuggingFace model. "
                 f"Specify 'type' in config to avoid ambiguity."
             )
-            return HuggingFaceModel(model_name, **kwargs)
+            # Check if vLLM engine is requested for default case
+            if engine == "vllm":
+                model_id = kwargs.get("model_id", model_name)
+                vllm_kwargs = {k: v for k, v in kwargs.items() if k != "model_id"}
+                return VLLMModel(model_name, model_id, **vllm_kwargs)
+            else:
+                return HuggingFaceModel(model_name, **kwargs)
 
     @staticmethod
     def get_model_capabilities(model_name: str, **kwargs) -> Dict[str, Any]:
