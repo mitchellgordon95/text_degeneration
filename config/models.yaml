@@ -3,7 +3,7 @@
 models:
   # GPT-2 models (HuggingFace)
   gpt2:
-    type: huggingface
+    type: vllm
     model_id: gpt2
     device: auto
     capabilities:
@@ -16,7 +16,7 @@ models:
       notes: "Full capabilities - autoregressive causal LM"
 
   gpt2-medium:
-    type: huggingface
+    type: vllm
     model_id: gpt2-medium
     device: auto
     capabilities:
@@ -29,7 +29,7 @@ models:
       notes: "Full capabilities - autoregressive causal LM"
 
   gpt2-large:
-    type: huggingface
+    type: vllm
     model_id: gpt2-large
     device: auto
     load_in_8bit: false  # Set to true if low on VRAM
@@ -43,7 +43,7 @@ models:
       notes: "Full capabilities - autoregressive causal LM, used in Holtzman et al. 2019"
 
   gpt2-xl:
-    type: huggingface
+    type: vllm
     model_id: gpt2-xl
     device: auto
     load_in_8bit: false
@@ -156,7 +156,7 @@ models:
 
   # Llama models (HuggingFace)
   llama3-8b:
-    type: huggingface
+    type: vllm
     model_id: meta-llama/Meta-Llama-3-8B-Instruct
     device: auto
     load_in_8bit: true  # Recommended for consumer GPUs
@@ -170,7 +170,7 @@ models:
       notes: "Full capabilities - Llama-3 8B instruction-tuned model"
 
   llama3-70b:
-    type: huggingface
+    type: vllm
     model_id: meta-llama/Llama-3.3-70B-Instruct  # December 2024 release
     device: auto
     load_in_8bit: true  # Required for most GPUs
@@ -185,7 +185,7 @@ models:
 
   # Qwen models (Alibaba) - September 2024 release
   qwen2.5-7b:
-    type: huggingface
+    type: vllm
     model_id: Qwen/Qwen2.5-7B-Instruct
     device: auto
     load_in_8bit: false
@@ -199,7 +199,7 @@ models:
       notes: "Full capabilities - Qwen2.5 7B instruction-tuned model"
 
   qwen2.5-72b:
-    type: huggingface
+    type: vllm
     model_id: Qwen/Qwen2.5-72B-Instruct  # September 2024 release
     device: auto
     load_in_8bit: true  # Requires 80GB+ VRAM without quantization
@@ -214,7 +214,7 @@ models:
 
   # Mistral models
   mistral-7b:
-    type: huggingface
+    type: vllm
     model_id: mistralai/Mistral-7B-Instruct-v0.3
     device: auto
     load_in_8bit: false
@@ -228,7 +228,7 @@ models:
       notes: "Full capabilities - Mistral 7B instruction-tuned model"
 
   mistral-small-3-24b:
-    type: huggingface
+    type: vllm
     model_id: mistralai/Mistral-Small-24B-Instruct-2501  # January 2025 release
     device: auto
     load_in_8bit: true
@@ -242,7 +242,7 @@ models:
       notes: "Full capabilities - Mistral Small 24B instruction-tuned model"
 
   mixtral-8x7b:
-    type: huggingface
+    type: vllm
     model_id: mistralai/Mixtral-8x7B-Instruct-v0.1  # MoE architecture
     device: auto
     load_in_8bit: true  # MoE architecture, efficient but still large
@@ -257,7 +257,7 @@ models:
 
   # DeepSeek models
   deepseek-7b:
-    type: huggingface
+    type: vllm
     model_id: deepseek-ai/deepseek-llm-7b-chat
     device: auto
     load_in_8bit: false
@@ -271,7 +271,7 @@ models:
       notes: "Full capabilities - DeepSeek 7B chat model"
 
   deepseek-67b:
-    type: huggingface
+    type: vllm
     model_id: deepseek-ai/deepseek-llm-67b-chat
     device: auto
     load_in_8bit: true

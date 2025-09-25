@@ -3,7 +3,7 @@
 from .base import BaseModel, UnsupportedMethodError
 from .openai_model import OpenAIModel
 from .anthropic_model import AnthropicModel
-from .huggingface_model import HuggingFaceModel
+from .vllm_model import VLLMModel
 from .unified import UnifiedModel
 
 __all__ = [
@@ -11,6 +11,6 @@ __all__ = [
     "UnsupportedMethodError",
     "OpenAIModel",
     "AnthropicModel",
-    "HuggingFaceModel",
+    "VLLMModel",
     "UnifiedModel"
 ]
