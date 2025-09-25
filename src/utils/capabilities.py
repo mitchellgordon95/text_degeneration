@@ -233,7 +233,7 @@ def get_compatible_experiments(models_config: Dict[str, Any]) -> Dict[str, List[
 
             if model_type in ['openai', 'anthropic']:
                 experiments['api_models'].append(model_name)
-            elif model_type == 'huggingface':
+            elif model_type == 'vllm':
                 experiments['local_models'].append(model_name)
 
         except Exception as e:

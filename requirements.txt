@@ -29,3 +29,4 @@ seaborn>=0.12.0
 python-dotenv>=1.0.0  # For environment variables
 rich>=13.0.0  # For better console output
 tenacity>=8.2.0  # For retrying API calls
+vllm==0.10.2  # High-performance LLM inference

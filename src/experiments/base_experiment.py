@@ -139,7 +139,7 @@ class BaseExperiment:
                 self.print_metrics_summary(model_name, method, metrics)
 
             # Clean up GPU memory after this model
-            if model_type == "huggingface" and torch.cuda.is_available():
+            if model_type == "vllm" and torch.cuda.is_available():
                 del model
                 gc.collect()
                 torch.cuda.empty_cache()

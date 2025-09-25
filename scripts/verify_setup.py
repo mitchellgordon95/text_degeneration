@@ -230,7 +230,7 @@ class AcademicVerifier:
 
             # Measure GPU memory if applicable
             memory_used = None
-            if model_type == "huggingface" and self.gpu_info["available"]:
+            if model_type == "vllm" and self.gpu_info["available"]:
                 memory_after = torch.cuda.memory_allocated() / 1e9
                 memory_used = memory_after
                 print(f"  💾 GPU memory used: {memory_used:.1f} GB")
@@ -353,7 +353,7 @@ class AcademicVerifier:
                     )
 
             # Clean up GPU memory
-            if model_type == "huggingface" and self.gpu_info["available"]:
+            if model_type == "vllm" and self.gpu_info["available"]:
                 del model
                 gc.collect()
                 torch.cuda.empty_cache()
@@ -520,6 +520,9 @@ class AcademicVerifier:
             else:
                 temperature = 1.0  # Default temperature
             return model.generate_temperature(prompt, temperature, max_length)
+        elif method == "pure_sampling":
+            # Pure sampling: temperature=1.0, no truncation (top_p=1.0, top_k=None)
+            return model.generate_temperature(prompt, 1.0, max_length)
         else:
             raise ValueError(f"Unknown method: {method}")
 
