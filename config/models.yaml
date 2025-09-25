@@ -173,7 +173,10 @@ models:
     type: vllm
     model_id: meta-llama/Llama-3.3-70B-Instruct  # December 2024 release
     device: auto
-    load_in_8bit: true  # Required for most GPUs
+    quantization: "fp8"           # FP8 dynamic quantization (no pre-quantized model needed)
+    gpu_memory_utilization: 0.90  # Increase memory utilization
+    max_model_len: 2048           # Further reduce context length
+    cpu_offload_gb: 8             # Increase CPU offloading
     capabilities:
       supported_methods: ["greedy", "beam", "temperature", "nucleus", "top_k", "pure_sampling"]
       supports_logprobs: true
@@ -202,7 +205,10 @@ models:
     type: vllm
     model_id: Qwen/Qwen2.5-72B-Instruct  # September 2024 release
     device: auto
-    load_in_8bit: true  # Requires 80GB+ VRAM without quantization
+    quantization: "fp8"          # FP8 quantization optimized for H100 GPUs
+    gpu_memory_utilization: 0.85  # Balance between model and KV cache
+    max_model_len: 4096           # Reduce context length to fit in memory
+    cpu_offload_gb: 4             # Offload some layers to CPU if needed
     capabilities:
       supported_methods: ["greedy", "beam", "temperature", "nucleus", "top_k", "pure_sampling"]
       supports_logprobs: true
@@ -245,7 +251,9 @@ models:
     type: vllm
     model_id: mistralai/Mixtral-8x7B-Instruct-v0.1  # MoE architecture
     device: auto
-    load_in_8bit: true  # MoE architecture, efficient but still large
+    quantization: "fp8"          # FP8 quantization optimized for H100 GPUs
+    gpu_memory_utilization: 0.85  # MoE is more memory efficient, slightly higher
+    max_model_len: 8192           # MoE can handle longer contexts
     capabilities:
       supported_methods: ["greedy", "beam", "temperature", "nucleus", "top_k", "pure_sampling"]
       supports_logprobs: true
@@ -274,7 +282,10 @@ models:
     type: vllm
     model_id: deepseek-ai/deepseek-llm-67b-chat
     device: auto
-    load_in_8bit: true
+    quantization: "fp8"          # FP8 quantization optimized for H100 GPUs
+    gpu_memory_utilization: 0.85  # Balance between model and KV cache
+    max_model_len: 4096           # Reduce context length to fit in memory
+    cpu_offload_gb: 4             # Offload some layers to CPU if needed
     capabilities:
       supported_methods: ["greedy", "beam", "temperature", "nucleus", "top_k", "pure_sampling"]
       supports_logprobs: true

@@ -39,8 +39,8 @@ class VLLMModel(BaseModel):
         # Map HuggingFace parameters to vLLM equivalents
         vllm_kwargs = {}
 
-        # Map load_in_8bit to quantization
-        if kwargs.get("load_in_8bit", False):
+        # Map load_in_8bit to quantization (only if no explicit quantization is set)
+        if kwargs.get("load_in_8bit", False) and "quantization" not in kwargs:
             vllm_kwargs["quantization"] = "fp8"  # Use FP8 quantization in vLLM
 
         # Map device parameter
@@ -53,7 +53,7 @@ class VLLMModel(BaseModel):
             "tensor_parallel_size", "pipeline_parallel_size", "max_model_len",
             "block_size", "swap_space", "gpu_memory_utilization", "max_num_batched_tokens",
             "max_num_seqs", "max_paddings", "quantization", "enforce_eager",
-            "max_context_len_to_capture", "disable_custom_all_reduce"
+            "max_context_len_to_capture", "disable_custom_all_reduce", "cpu_offload_gb"
         ]
 
         for param in vllm_params:
