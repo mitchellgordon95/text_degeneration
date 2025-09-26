@@ -216,7 +216,7 @@ class VLLMModel(BaseModel):
                 # Generate with prompt logprobs to get likelihood
                 sampling_params = SamplingParams(
                     temperature=0.0,
-                    max_tokens=0,  # Don't generate new tokens
+                    max_tokens=1,  # Minimum required by vLLM (we ignore the generated token)
                     prompt_logprobs=len(text.split()),  # Get logprobs for input tokens
                 )
 
@@ -226,7 +226,12 @@ class VLLMModel(BaseModel):
                 if hasattr(outputs[0], 'prompt_logprobs') and outputs[0].prompt_logprobs:
                     for token_logprob in outputs[0].prompt_logprobs:
                         if token_logprob is not None:
-                            total_log_prob += list(token_logprob.values())[0]
+                            # Extract logprob value from Logprob object
+                            logprob_obj = list(token_logprob.values())[0]
+                            if hasattr(logprob_obj, 'logprob'):
+                                total_log_prob += logprob_obj.logprob
+                            else:
+                                total_log_prob += float(logprob_obj)
                             total_tokens += 1
 
             if total_tokens == 0:
@@ -284,7 +289,7 @@ class VLLMModel(BaseModel):
                 # Generate with prompt logprobs to get likelihood
                 sampling_params = SamplingParams(
                     temperature=0.0,
-                    max_tokens=0,  # Don't generate new tokens
+                    max_tokens=1,  # Minimum required by vLLM (we ignore the generated token)
                     prompt_logprobs=len(text.split()),  # Get logprobs for input tokens
                 )
 
@@ -294,7 +299,12 @@ class VLLMModel(BaseModel):
                 if hasattr(outputs[0], 'prompt_logprobs') and outputs[0].prompt_logprobs:
                     for token_logprob in outputs[0].prompt_logprobs:
                         if token_logprob is not None:
-                            total_log_prob += list(token_logprob.values())[0]
+                            # Extract logprob value from Logprob object
+                            logprob_obj = list(token_logprob.values())[0]
+                            if hasattr(logprob_obj, 'logprob'):
+                                total_log_prob += logprob_obj.logprob
+                            else:
+                                total_log_prob += float(logprob_obj)
                             total_tokens += 1
 
             if total_tokens == 0:
