@@ -27,6 +27,12 @@ class VLLMModel(BaseModel):
         # Filter out HuggingFace-specific parameters that vLLM doesn't need
         vllm_kwargs = self._filter_vllm_kwargs(kwargs)
 
+        # Set max_logprobs to support beam search
+        # vLLM beam search needs 2 * beam_width logprobs
+        # Set to 32 to support beam sizes up to 16 (matching Holtzman's experiments)
+        if "max_logprobs" not in vllm_kwargs:
+            vllm_kwargs["max_logprobs"] = 32
+
         # Initialize vLLM engine
         try:
             self.llm = LLM(model=model_id, **vllm_kwargs)
