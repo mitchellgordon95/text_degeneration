@@ -54,4 +54,4 @@ temp/
 *.tmp
 
 # Claude
-.claude/
+.claude/nohup.out

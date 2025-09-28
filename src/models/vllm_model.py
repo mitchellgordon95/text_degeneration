@@ -217,7 +217,7 @@ class VLLMModel(BaseModel):
                 sampling_params = SamplingParams(
                     temperature=0.0,
                     max_tokens=1,  # Minimum required by vLLM (we ignore the generated token)
-                    prompt_logprobs=len(text.split()),  # Get logprobs for input tokens
+                    prompt_logprobs=1,  # Get logprobs for actual token at each position
                 )
 
                 outputs = self.llm.generate([text], sampling_params)
@@ -290,7 +290,7 @@ class VLLMModel(BaseModel):
                 sampling_params = SamplingParams(
                     temperature=0.0,
                     max_tokens=1,  # Minimum required by vLLM (we ignore the generated token)
-                    prompt_logprobs=len(text.split()),  # Get logprobs for input tokens
+                    prompt_logprobs=1,  # Get logprobs for actual token at each position
                 )
 
                 outputs = self.llm.generate([text], sampling_params)
