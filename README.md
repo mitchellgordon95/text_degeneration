@@ -11,7 +11,7 @@ This repository contains experiments testing whether findings from "The Curious 
 2. **Human text is not the most probable** - Text generated with maximaztion-based decoding has much lower perplexity than human text
   - *Perplexity Gap*: Overconfidence ratio (GPT-2: 8.4x)
 3. **The long tail of logprobs is unreliable** - Low-probability tokens lead to incoherent generation
-  - *HUSE Score* - Human-rated typicality score for generations with forced tail tokens vs. human text
+  - *HUSE Score* - Human-rated typicality score for pure sampling vs. human text vs. truncated tail (top_p)
 
 ## 📚 Documentation
 
