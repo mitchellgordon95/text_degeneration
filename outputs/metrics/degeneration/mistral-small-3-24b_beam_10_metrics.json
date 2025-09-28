@@ -1,0 +1,14 @@
+{
+  "model": "mistral-small-3-24b",
+  "method": "beam_10",
+  "metrics": {
+    "repetition_rate": 0.0,
+    "self_bleu": 0.013129916506904243,
+    "perplexity": 2.1738673859921667,
+    "human_perplexity": 9.256147807575804,
+    "overconfidence_ratio": 4.257917418155312,
+    "zipf_coefficient": 0.9174986445001017,
+    "num_outputs": 20
+  },
+  "timestamp": "2025-09-28T18:59:24.307376"
+}

@@ -1,0 +1,14 @@
+{
+  "model": "gpt2",
+  "method": "nucleus_0.95",
+  "metrics": {
+    "repetition_rate": 0.0,
+    "self_bleu": 0.013630213653782596,
+    "perplexity": 54.14358548639174,
+    "human_perplexity": 40.136679636649056,
+    "overconfidence_ratio": 0.741300733523399,
+    "zipf_coefficient": 0.5086183785793362,
+    "num_outputs": 20
+  },
+  "timestamp": "2025-09-28T17:40:51.270928"
+}

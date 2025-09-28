@@ -1,0 +1,14 @@
+{
+  "model": "gpt2",
+  "method": "pure_sampling",
+  "metrics": {
+    "repetition_rate": 0.0,
+    "self_bleu": 0.00997755268824831,
+    "perplexity": 112.88780339828313,
+    "human_perplexity": 40.136679636649056,
+    "overconfidence_ratio": 0.355544872239577,
+    "zipf_coefficient": 0.45694330738064975,
+    "num_outputs": 20
+  },
+  "timestamp": "2025-09-28T17:40:33.103475"
+}

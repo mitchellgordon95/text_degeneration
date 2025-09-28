@@ -1,0 +1,14 @@
+{
+  "model": "mixtral-8x7b",
+  "method": "top_k_40",
+  "metrics": {
+    "repetition_rate": 0.0,
+    "self_bleu": 0.03192167950433099,
+    "perplexity": 5.589711080280802,
+    "human_perplexity": 7.568109734530027,
+    "overconfidence_ratio": 1.3539357626601765,
+    "zipf_coefficient": 0.6041932747581403,
+    "num_outputs": 20
+  },
+  "timestamp": "2025-09-28T18:39:41.915696"
+}

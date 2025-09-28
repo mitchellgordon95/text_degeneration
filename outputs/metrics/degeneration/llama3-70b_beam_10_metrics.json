@@ -1,0 +1,14 @@
+{
+  "model": "llama3-70b",
+  "method": "beam_10",
+  "metrics": {
+    "repetition_rate": 0.0,
+    "self_bleu": 0.07555434398036949,
+    "perplexity": 1.8315888790427952,
+    "human_perplexity": 7.2779348681175655,
+    "overconfidence_ratio": 3.9735635826316438,
+    "zipf_coefficient": 0.9166061997965768,
+    "num_outputs": 20
+  },
+  "timestamp": "2025-09-28T19:23:04.588670"
+}

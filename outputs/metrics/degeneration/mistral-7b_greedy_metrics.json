@@ -1,0 +1,14 @@
+{
+  "model": "mistral-7b",
+  "method": "greedy",
+  "metrics": {
+    "repetition_rate": 0.0,
+    "self_bleu": 0.046690931480074846,
+    "perplexity": 2.004603712928709,
+    "human_perplexity": 9.007066446964215,
+    "overconfidence_ratio": 4.4931905437833235,
+    "zipf_coefficient": 0.7870241041143213,
+    "num_outputs": 20
+  },
+  "timestamp": "2025-09-28T18:42:20.007107"
+}

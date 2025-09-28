@@ -1,0 +1,14 @@
+{
+  "model": "qwen2.5-72b",
+  "method": "pure_sampling",
+  "metrics": {
+    "repetition_rate": 0.0,
+    "self_bleu": 0.14095079958737836,
+    "perplexity": 3.118995435451287,
+    "human_perplexity": 7.768301914467174,
+    "overconfidence_ratio": 2.4906422837849327,
+    "zipf_coefficient": 0.7731974835017364,
+    "num_outputs": 20
+  },
+  "timestamp": "2025-09-28T18:18:17.690062"
+}

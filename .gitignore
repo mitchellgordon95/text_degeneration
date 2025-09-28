@@ -55,4 +55,4 @@ temp/
 
 # Claude
 .claude/nohup.out
-outputs/
+# outputs/  # Commented out - we want to track experiment results

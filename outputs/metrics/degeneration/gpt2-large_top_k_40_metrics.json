@@ -1,0 +1,14 @@
+{
+  "model": "gpt2-large",
+  "method": "top_k_40",
+  "metrics": {
+    "repetition_rate": 0.0,
+    "self_bleu": 0.032597417482079824,
+    "perplexity": 9.562378106561292,
+    "human_perplexity": 25.56320290999192,
+    "overconfidence_ratio": 2.6733101980616674,
+    "zipf_coefficient": 0.6689076299783823,
+    "num_outputs": 20
+  },
+  "timestamp": "2025-09-28T17:46:03.269124"
+}

@@ -1,0 +1,14 @@
+{
+  "model": "gpt2-large",
+  "method": "beam_16",
+  "metrics": {
+    "repetition_rate": 35.0,
+    "self_bleu": 0.01013335998493551,
+    "perplexity": 1.7006979370094988,
+    "human_perplexity": 25.56320290999192,
+    "overconfidence_ratio": 15.031007184581034,
+    "zipf_coefficient": 1.2802247303906795,
+    "num_outputs": 20
+  },
+  "timestamp": "2025-09-28T17:43:43.009317"
+}

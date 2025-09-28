@@ -1,0 +1,14 @@
+{
+  "model": "qwen2.5-72b",
+  "method": "beam_10",
+  "metrics": {
+    "repetition_rate": 0.0,
+    "self_bleu": 0.22246468672195685,
+    "perplexity": 1.4966708279765486,
+    "human_perplexity": 7.768301914467174,
+    "overconfidence_ratio": 5.190387738745247,
+    "zipf_coefficient": 0.9101411938840713,
+    "num_outputs": 20
+  },
+  "timestamp": "2025-09-28T18:15:54.067886"
+}

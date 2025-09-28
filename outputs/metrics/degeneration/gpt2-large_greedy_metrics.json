@@ -1,0 +1,14 @@
+{
+  "model": "gpt2-large",
+  "method": "greedy",
+  "metrics": {
+    "repetition_rate": 5.0,
+    "self_bleu": 0.052272738619393765,
+    "perplexity": 1.588334725170005,
+    "human_perplexity": 25.56320290999192,
+    "overconfidence_ratio": 16.094342398297563,
+    "zipf_coefficient": 1.1768093093604153,
+    "num_outputs": 20
+  },
+  "timestamp": "2025-09-28T17:41:31.700984"
+}
