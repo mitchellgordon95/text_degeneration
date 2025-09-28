@@ -233,14 +233,6 @@ def main():
                 print(f"{'Top-k-40':<20} {'0.39':<12} {'0.78%':<12} {'6.88':<12}")
                 print(f"{'Nucleus-0.95':<20} {'0.32':<12} {'0.36%':<12} {'13.13':<12}")
 
-                # Compare to Holtzman if applicable
-                comparison = experiment.compare_to_holtzman()
-                if comparison:
-                    print("\n\nComparison to Holtzman et al. 2019:")
-                    for model, methods in comparison.items():
-                        print(f"\n{model}:")
-                        for method, stats in methods.items():
-                            print(f"  {method:15} Our: {stats['our_rate']:.2f}% | Holtzman: {stats['holtzman_rate']:.2f}% | Diff: {stats['difference']:+.2f}%")
 
                 # Token summary
                 print(f"\nTotal tokens: {experiment.total_tokens:,}")
