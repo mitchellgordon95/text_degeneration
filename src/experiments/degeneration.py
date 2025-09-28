@@ -80,7 +80,7 @@ class DegenerationExperiment(BaseExperiment):
             }
 
         # Core metrics
-        repetition_rate = measure_repetition_rate(valid_outputs, n=4)
+        repetition_rate = measure_repetition_rate(valid_outputs)
         self_bleu = compute_self_bleu(valid_outputs, n=4)
         zipf_coef = compute_zipf_coefficient(valid_outputs)
 
