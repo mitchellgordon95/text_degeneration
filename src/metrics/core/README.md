@@ -5,8 +5,9 @@ These are the core metrics from "The Curious Case of Neural Text Degeneration" (
 ## Implemented Metrics
 
 ### 1. Repetition Rate (`repetition.py`)
-- Measures the percentage of text consisting of repeated n-grams
-- Default: 4-gram repetition as used in the paper
+- Measures the percentage of texts with phrase repetition at the end
+- Following Holtzman et al.: phrases (min length 2) that repeat ≥3 times at generation end
+- Evaluated within first 200 tokens of each generated text
 - Key finding: GPT-2 with beam search showed ~29% repetition
 
 ### 2. Perplexity Gap (`perplexity.py`)

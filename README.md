@@ -22,7 +22,7 @@ This repository contains experiments testing whether findings from "The Curious 
 
 ## Key Metrics (Reproducing Holtzman et al. 2019)
 
-1. **Repetition Rate**: % of repeated 4-grams (GPT-2: 73.66% with greedy)
+1. **Repetition Rate**: % of texts with phrase repetition at the end (GPT-2: ~29% with beam search)
 2. **Perplexity Gap**: Overconfidence ratio (GPT-2: 8.4x)
 3. **Self-BLEU**: Diversity measure (GPT-2: 0.50 with greedy)
 4. **Zipf Coefficient**: Word frequency distribution
