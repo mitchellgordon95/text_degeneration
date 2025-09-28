@@ -2,16 +2,16 @@
 
 This repository contains experiments testing whether findings from "The Curious Case of Neural Text Degeneration" (Holtzman et al., 2019) still apply to modern language models.
 
-## Core Question
+## Main Claims from Holtzman et al. (2019) & Key Metrics
 
-**Do modern LLMs (GPT-4, Claude-3.5, Llama-3) trained with RLHF still exhibit the text degeneration problems identified in 2019?**
-
-## Four Main Claims from Holtzman et al. (2019)
-
-1. **Greedy decoding creates repetition** - Deterministic methods produce highly repetitive text
-2. **Using higher beam search results in worse text** - Larger beam sizes paradoxically decrease quality
-3. **Models are "overconfident"** - Generated text has much lower perplexity than human text
-4. **The long tail of logprobs is unreliable** - Low-probability tokens lead to incoherent generation
+1. **Maximization-based decoding methods lead to degeneration** - Increasing beam search width degenerates open-ended text generation
+  - *Repetition Rate*: % of texts with phrase repetition at the end (GPT-2: ~29% with beam search)
+  - *Self-BLEU*: Diversity measure (GPT-2: 0.50 with greedy)
+  - *Zipf Coefficient*: Word frequency distribution
+2. **Human text is not the most probable** - Text generated with maximaztion-based decoding has much lower perplexity than human text
+  - *Perplexity Gap*: Overconfidence ratio (GPT-2: 8.4x)
+3. **The long tail of logprobs is unreliable** - Low-probability tokens lead to incoherent generation
+  - *HUSE Score* - Human-rated typicality score for generations with forced tail tokens vs. human text
 
 ## 📚 Documentation
 
@@ -19,13 +19,6 @@ This repository contains experiments testing whether findings from "The Curious 
 - 📖 **[References](REFERENCES.md)** - All relevant papers and citations
 - 🤖 **[Claude Instructions](CLAUDE.md)** - Guidelines for AI assistants working on this project
 - 👥 **[Human Evaluation Protocol](human_evaluation_protocol.md)** - Guidelines for human evaluation (future)
-
-## Key Metrics (Reproducing Holtzman et al. 2019)
-
-1. **Repetition Rate**: % of texts with phrase repetition at the end (GPT-2: ~29% with beam search)
-2. **Perplexity Gap**: Overconfidence ratio (GPT-2: 8.4x)
-3. **Self-BLEU**: Diversity measure (GPT-2: 0.50 with greedy)
-4. **Zipf Coefficient**: Word frequency distribution
 
 ## Setup Instructions
 
