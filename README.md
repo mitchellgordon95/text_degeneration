@@ -6,15 +6,19 @@ This repository contains experiments testing whether findings from "The Curious 
 
 **Do modern LLMs (GPT-4, Claude-3.5, Llama-3) trained with RLHF still exhibit the text degeneration problems identified in 2019?**
 
+## Four Main Claims from Holtzman et al. (2019)
+
+1. **Greedy decoding creates repetition** - Deterministic methods produce highly repetitive text
+2. **Using higher beam search results in worse text** - Larger beam sizes paradoxically decrease quality
+3. **Models are "overconfident"** - Generated text has much lower perplexity than human text
+4. **The long tail of logprobs is unreliable** - Low-probability tokens lead to incoherent generation
+
 ## 📚 Documentation
 
-- 📊 **[Baseline Results](BASELINE_RESULTS.md)** - Holtzman's original GPT-2 results we're reproducing
 - ⚠️ **[API Limitations](API_LIMITATIONS.md)** - Why certain experiments only work with local models
 - 📖 **[References](REFERENCES.md)** - All relevant papers and citations
-- 🎓 **[Academic Principles](ACADEMIC_PRINCIPLES.md)** - Research rigor guidelines
 - 🤖 **[Claude Instructions](CLAUDE.md)** - Guidelines for AI assistants working on this project
 - 👥 **[Human Evaluation Protocol](human_evaluation_protocol.md)** - Guidelines for human evaluation (future)
-- 📄 **[Research Report](research_report.md)** - Detailed analysis and findings (in progress)
 
 ## Key Metrics (Reproducing Holtzman et al. 2019)
 
