@@ -4,7 +4,7 @@ This repository contains experiments testing whether findings from "The Curious 
 
 ## Main Claims from Holtzman et al. (2019) & Key Metrics
 
-1. **Maximization-based decoding methods lead to degeneration** - Increasing beam search width degenerates open-ended text generation
+1. **Maximization-based decoding methods lead to degeneration** - Greedy / beam search creates degenerate open-ended text
   - *Repetition Rate*: % of texts with phrase repetition at the end (GPT-2: ~29% with beam search)
   - *Self-BLEU*: Diversity measure (GPT-2: 0.50 with greedy)
   - *Zipf Coefficient*: Word frequency distribution
